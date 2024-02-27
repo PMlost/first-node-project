@@ -1,0 +1,198 @@
+<style>
+  .image-container {
+    z-index: 1;
+  }
+</style>
+
+<section class="bg-light">
+  <div class="container pb-5">
+    <div class="row">
+      <div class="col-lg-5 mt-5">
+        <%for (let i = 0; i < (productDetail.imgSrc.length); i++) {%>
+
+        <div class="card mb-3 image-container">
+          <img
+            class="card-img img-fluid largeImage"
+            src="<%=productDetail.imgSrc[i] %>"
+            alt="Card image cap"
+            id="product-detail"
+          />
+        </div>
+        <div class="row">
+          <!--Start Controls-->
+          <div class="col-1 align-self-center">
+            <a href="#multi-item-example" role="button" data-bs-slide="prev">
+              <i class="text-dark fas fa-chevron-left"></i>
+              <span class="sr-only">Previous</span>
+            </a>
+          </div>
+          <!--End Controls-->
+          <!--Start Carousel Wrapper-->
+          <div
+            id="multi-item-example"
+            class="col-10 carousel slide carousel-multi-item"
+            data-bs-ride="carousel"
+          >
+            <!--Start Slides-->
+            <div class="carousel-inner product-links-wap" role="listbox">
+              <div class="carousel-item active">
+                <div class="row">
+                  <div class="col-4">
+                    <a href="#">
+                      <img
+                        class="card-img img-fluid smallImages"
+                        src="<%=productDetail.imgSrc[i+1] %>"
+                        alt="Product Image 1"
+                      />
+                    </a>
+                  </div>
+                  <div class="col-4">
+                    <a href="#">
+                      <img
+                        class="card-img img-fluid smallImages"
+                        src="<%=productDetail.imgSrc[i+2] %>"
+                        alt="Product Image 2"
+                      />
+                    </a>
+                  </div>
+                  <div class="col-4">
+                    <a href="#">
+                      <img
+                        class="card-img img-fluid smallImages"
+                        src="<%=productDetail.imgSrc[i] %>"
+                        alt="Product Image 3"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!--/.Third slide-->
+            </div>
+            <!--End Slides-->
+          </div>
+          <!--End Carousel Wrapper-->
+          <!--Start Controls-->
+          <div class="col-1 align-self-center">
+            <a href="#multi-item-example" role="button" data-bs-slide="next">
+              <i class="text-dark fas fa-chevron-right"></i>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <!--End Controls-->
+        </div>
+      </div>
+      <% break }%>
+
+      <!-- col end -->
+      <div class="col-lg-7 mt-5 rightcard">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="h2"><%=productDetail.name %></h1>
+
+            <p class="h3 py-2">
+              <% let discountPercentage = 0; if (productDetail.offer && new
+              Date() >= productDetail.offer.startDate && new Date() <=
+              productDetail.offer.endDate) { discountPercentage +=
+              productDetail.offer.discountPercentage; } if
+              (productDetail.categoryId.offer && new Date() >=
+              productDetail.categoryId.offer.startDate && new Date() <=
+              productDetail.categoryId.offer.endDate) { discountPercentage +=
+              productDetail.categoryId.offer.discountPercentage; } if
+              (discountPercentage > 0) { %>
+              <del><%= '₹'+productDetail.price %></del>
+              <%= '₹'+(productDetail.price - (productDetail.price *
+              discountPercentage / 100)) %> <% } else { %> <%=
+              '₹'+productDetail.price %> <% } %>
+            </p>
+            <p class="py-2">
+              <i class="fa fa-star text-warning"></i>
+              <i class="fa fa-star text-warning"></i>
+              <i class="fa fa-star text-warning"></i>
+              <i class="fa fa-star text-warning"></i>
+              <i class="fa fa-star text-secondary"></i>
+              <span class="list-inline-item text-dark">Rating 4.8</span>
+            </p>
+
+            <h6>Description:</h6>
+            <p><%=productDetail.description %></p>
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <h6>Avaliable Color :</h6>
+              </li>
+              <li class="list-inline-item">
+                <p class="text-muted"><strong>White / Black</strong></p>
+              </li>
+            </ul>
+
+            <div class="row pb-3">
+              <div class="col d-grid">
+                <button
+                  type="submit"
+                  class="btn btn-success btn-lg addtocartbtn"
+                  name="submit"
+                  value="addtocard"
+                >
+                  <a
+                    class="btn btn-success text-white mt-2 add-to-cart-btn"
+                    data-product-id="<%= (productDetail._id) %>"
+                  >
+                    <i class="fas fa-cart-plus"> Cart</i>
+                  </a>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- featured products -->
+<!-- //script of adding cart quantity -->
+<script
+  defer
+  src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/js-image-zoom/js-image-zoom.min.js"></script>
+<script defer>
+  document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
+    button.addEventListener("click", function (e) {
+      const productId = this.dataset.productId;
+
+      if (productId) {
+        axios
+          .post("/users/addToCart", { productId })
+          .then((response) => {
+            const totalQuantity = response.data.totalQuantity;
+            document.querySelector(".cart-total-count").textContent =
+              totalQuantity;
+
+            if (response.data.success) {
+              toastr.success("Product added to cart successfully!", "Success");
+            } else {
+              toastr.error(response.data.message, "user not signed in ");
+            }
+          })
+
+          .catch((error) => {
+            console.error("Error adding to cart:", error);
+          });
+      }
+    });
+  });
+
+  // ..for image on large box
+  document.addEventListener("click", (e) => {
+    if (e.target.matches(".smallImages")) {
+      let largeImage = document.querySelector(".largeImage");
+      largeImage.src = e.target.src;
+    }
+    new ImageZoom(document.querySelector(".image-container"), options);
+  });
+
+  //zoom
+
+  let options = {};
+
+  new ImageZoom(document.querySelector(".image-container"), options);
+</script>

@@ -1,0 +1,56 @@
+<div class="container">
+  <h1 class="text-center mb-4">View Coupons</h1>
+  <div class="mb-3">
+    <a href="/admin/add-coupon" class="btn btn-info">Add Coupon</a>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">SL NO</th>
+        <th scope="col">Coupon Name</th>
+        <th scope="col">Discount</th>
+        <th scope="col">Min Value</th>
+        <th scope="col">Max Value</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% coupons.forEach((coupon, index) => { %>
+      <tr>
+        <th scope="row"><%= index + 1 %></th>
+        <td><%= coupon.name %></td>
+        <td><%= coupon.discount %>%</td>
+        <td><%= coupon.minimumvalue %></td>
+        <td><%= coupon.maximumvalue %></td>
+        <td>
+          <a
+            class="btn btn-primary btn-edit"
+            href="/admin/edit-coupon?id=<%= coupon._id %>"
+          >
+            Edit
+          </a>
+
+          <a href="/admin/delete-coupon?id=<%= coupon._id %>"> </a>
+
+          <button
+            class="btn btn-danger btn-delete"
+            onclick="confirmDelete(`<%= coupon._id %>`)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function confirmDelete(couponId) {
+    if (confirm("Are you sure to delete?")) {
+      window.location.href = `/admin/delete-coupon?id=${couponId}`;
+    } else {
+      return false;
+    }
+  }
+</script>

@@ -1,0 +1,477 @@
+<div>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <h2 class="mb-4 text-center">Order Management</h2>
+        <!-- // -->
+        <!-- date and pdf -->
+        <div class="mb-3 row" style="align-items: center">
+          <div
+            class="col-md-6 order-md-last d-flex align-items-center justify-content-between mb-2"
+          >
+            <div class="row d-flex align-items-center">
+              <label for="startdate" class="col-form-label col-md-3 text-md-end"
+                >Start Date:</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="date"
+                  class="form-control mb-2"
+                  id="startdate"
+                  name="startdate"
+                  onchange="dateClick()"
+                />
+              </div>
+            </div>
+            <div class="row d-flex align-items-center">
+              <label for="enddate" class="col-form-label col-md-3 text-md-end"
+                >End Date:</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="date"
+                  class="form-control mb-2"
+                  id="enddate"
+                  name="enddate"
+                  onchange="dateClick()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 d-flex flex-column mb-2">
+            <div class="d-flex gap-2 mb-2">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                id="todayBtn"
+              >
+                Today
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                id="weekBtn"
+              >
+                This Week
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                id="yearBtn"
+              >
+                This Year
+              </button>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary mb-2"
+              id="pdf"
+              style="background-color: #4caf50; border: none"
+            >
+              <i class="bi bi-file-pdf"></i> Download as PDF
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="excel"
+              style="background-color: #2196f3; border: none"
+            >
+              <i class="bi bi-file-excel"></i> Download as Excel
+            </button>
+          </div>
+        </div>
+
+        <!-- date and pdf ends -->
+        <div class="table-responsive">
+          <table class="table text-center border" id="ordersTable">
+            <thead>
+              <tr style="background-color: #f0f0f0">
+                <th scope="col">SL NO</th>
+                <th scope="col">User Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Payment Method</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date</th>
+                <th scope="col">ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <% if (ordersArray && ordersArray.length > 0) { %> <%
+              ordersArray.forEach((orderDetail, index) => { %>
+              <tr class="text-light">
+                <th><%= index + 1 %></th>
+                <td><%= orderDetail.userId.name %></td>
+                <td><%= orderDetail.payment.amount %></td>
+                <td><%= orderDetail.payment.method %></td>
+                <td><%= orderDetail.status %></td>
+                <td><%= orderDetail.createdAt.toDateString() %></td>
+                <td>
+                  <form action="/admin/updateStatus" method="post">
+                    <% if (orderDetail.status != "returned" &&
+                    orderDetail.status != "cancelled" && orderDetail.status !=
+                    "Delivered" && orderDetail.status != "return success" &&
+                    orderDetail.status != "return cancelled" &&
+                    orderDetail.status != "reject return") { %>
+                    <div class="col-md-10 d-flex justify-content-between">
+                      <a
+                        style="height: 30px; padding-bottom: 5px"
+                        class="btn btn-sm rounded bg-info border-0 text-sm"
+                        href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                        ><small>details</small></a
+                      >
+                      <select
+                        style="
+                          background-color: rgb(37, 37, 37);
+                          height: 30px;
+                          border-color: rgb(64, 64, 64);
+                        "
+                        name="status"
+                        class="browser-default text-light rounded custom-select"
+                      >
+                        <option><%= orderDetail.status %></option>
+                        <option>packed</option>
+                        <option>Shipped</option>
+                        <option>Delivered</option>
+                        <option>cancelled</option>
+                        <option>reject return</option>
+                        <option>out for pickup</option>
+                        <option>return success</option>
+                      </select>
+                      <input
+                        type="hidden"
+                        name="orderId"
+                        value="<%= orderDetail._id %>"
+                      />
+                      <button
+                        class="btn-sm"
+                        style="
+                          background-color: rgb(0, 255, 98);
+                          border: none;
+                          border-radius: 5px;
+                        "
+                        type="submit"
+                      >
+                        update
+                      </button>
+                    </div>
+                    <% } else if (orderDetail.status == "reject return") { %>
+                    <div class="col-md-10 d-flex justify-content-between">
+                      <small
+                        style="margin-right: 5px"
+                        class="text-secondary text-uppercase mt-1 text-decoration-none"
+                        >Returned Rejected</small
+                      >
+                      <a
+                        class="btn btn-sm rounded bg-info border-0 text-sm"
+                        href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                        ><small>details</small></a
+                      >
+                    </div>
+                    <% } else if (orderDetail.status == "delivered") { %>
+                    <div class="col-md-10 d-flex justify-content-between">
+                      <small
+                        style="margin-right: 5px"
+                        class="text-secondary text-uppercase mt-1 text-decoration-none"
+                        >Return Cancelled by User</small
+                      >
+                      <a
+                        class="btn btn-sm rounded bg-info border-0 text-sm"
+                        href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                        ><small>details</small></a
+                      >
+                    </div>
+                    <% } else if (orderDetail.status == "return success") { %>
+                    <div class="col-md-10 d-flex justify-content-between">
+                      <small
+                        style="margin-right: 5px"
+                        class="text-info text-uppercase mt-1 text-decoration-none"
+                        >Returned Successfully</small
+                      >
+                      <a
+                        class="btn btn-sm rounded bg-info border-0 text-sm"
+                        href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                        ><small>details</small></a
+                      >
+                    </div>
+                    <% } else if (orderDetail.status == "cancelled") { %>
+                    <div class="col-md-10 d-flex justify-content-between">
+                      <small
+                        style="margin-right: 5px"
+                        class="text-danger text-uppercase mt-1 text-decoration-none"
+                        >Order Cancelled</small
+                      >
+                      <a
+                        class="btn btn-sm rounded bg-info border-0 text-sm"
+                        href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                        ><small>details</small></a
+                      >
+                    </div>
+                    <% } else if (orderDetail.status == "returned" ||
+                    orderDetail.status == "return confirmed" ||
+                    orderDetail.status == "out for Pickup") { %>
+                    <a
+                      class="btn btn-sm rounded bg-info border-0 text-sm"
+                      href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                      ><small>details</small></a
+                    >
+                    <select
+                      style="
+                        background-color: rgb(37, 37, 37);
+                        height: 30px;
+                        border-color: rgb(64, 64, 64);
+                      "
+                      name="status"
+                      class="browser-default text-light rounded custom-select"
+                    >
+                      <option><%= orderDetail.status %></option>
+                      <option>return confirmed</option>
+                    </select>
+                    <input
+                      type="hidden"
+                      name="orderId"
+                      value="<%= orderDetail._id %>"
+                    />
+                    <button
+                      class="btn-sm"
+                      style="
+                        background-color: rgb(0, 255, 98);
+                        border: none;
+                        border-radius: 5px;
+                      "
+                      type="submit"
+                    >
+                      update
+                    </button>
+                    <% } else { %>
+                    <div class="col-md-10 d-flex justify-content-between">
+                      <small
+                        style="margin-right: 5px; color: rgb(124, 228, 54)"
+                        class="text-uppercase mt-1 text-decoration-none"
+                        >Delivered</small
+                      >
+                      <a
+                        class="btn btn-sm rounded bg-info border-0 text-sm"
+                        href="/admin/view-order-details?id=<%= orderDetail._id %>"
+                        ><small>details</small></a
+                      >
+                    </div>
+                    <% } %>
+                  </form>
+                </td>
+              </tr>
+              <% }) %> <% } else { %>
+              <tr class="text-light">
+                <td colspan="8">Products Not Found</td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+<script>
+  // for generating dates
+
+  //today
+  document.getElementById("todayBtn").addEventListener("click", function () {
+    let startDate = new Date();
+    startDate.setHours(23, 59, 59, 999);
+    let endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+
+    document.getElementById("startdate").valueAsDate = startDate;
+    document.getElementById("enddate").valueAsDate = endDate;
+
+    dateClick();
+  });
+
+  //weekBtn
+  document.getElementById("weekBtn").addEventListener("click", function () {
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+
+    let endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+
+    document.getElementById("startdate").valueAsDate = startDate;
+    document.getElementById("enddate").valueAsDate = endDate;
+
+    dateClick();
+  });
+
+  //ytearBtn
+  document.getElementById("yearBtn").addEventListener("click", function () {
+    let startDate = new Date();
+    startDate.setMonth(0, 1);
+    startDate.setHours(23, 59, 59, 999);
+
+    let endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+
+    document.getElementById("startdate").valueAsDate = startDate;
+    document.getElementById("enddate").valueAsDate = endDate;
+
+    dateClick();
+  });
+
+  function dateClick() {
+    let startDate = document.getElementById("startdate").value;
+    let endDate = document.getElementById("enddate").value;
+    endDate = new Date(endDate);
+    endDate.setHours(23, 59, 59, 999);
+
+    // .......
+    axios
+      .post("/admin/sales-order", { startDate, endDate })
+      .then((response) => {
+        let ordersDetails = response.data.orderDetail; //orders
+        let ordersTableHTML = "";
+
+        if (ordersDetails.length > 0) {
+          ordersDetails.forEach((order, i) => {
+            let createdAtString = new Date(order.createdAt).toDateString();
+
+            ordersTableHTML += `<tr> 
+                                  <th style="color:black;">${i + 1}</th>
+                                  <td style="color:black;">${
+                                    order.userId.name
+                                  }</td>
+                                  <td style="color:black;">${
+                                    order.payment.amount
+                                  }</td>
+                                  <td style="color:black;">${
+                                    order.payment.method
+                                  }</td>
+                                  <td style="color:black;">${order.status}</td>
+                                  <td style="color:black;">${createdAtString}</td>
+                                  <td>
+                                    <a style="color:black;" class="btn btn-info" href="/admin/view-order-details?id=${
+                                      order._id
+                                    }">view Details</a>
+                                    <br>
+                                    <br>
+                                  </td>
+                                </tr>`;
+          });
+        } else {
+          ordersTableHTML =
+            '<tr><td style="color:black;" colspan="5">Products Not Found</td></tr>';
+        }
+        document.getElementById("tbody").innerHTML = ordersTableHTML;
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
+
+  document.getElementById("pdf").addEventListener("click", () => {
+    let pdfDoc = new jsPDF();
+    pdfDoc.autoTable({
+      html: "#ordersTable",
+      columns: [
+        { header: "SL NO", dataKey: "index" },
+        { header: "Order Id", dataKey: "_id" },
+        { header: "User Name", dataKey: "name" },
+        { header: "Price", dataKey: "amount" },
+        { header: "Payment Method", dataKey: "method" },
+        { header: "Status", dataKey: "status" },
+        { header: "Date", dataKey: "createdAt" },
+      ],
+    });
+    let startDate = document.getElementById("startdate").value;
+    let endDate = document.getElementById("enddate").value;
+
+    // console.log(startDate, endDate);
+
+    axios
+      .post("/admin/sales-order", { startDate, endDate })
+      .then((response) => {
+        let { totalDiscount, totalSales, totalRevenue } = response.data;
+
+        // Add the start and end dates to the PDF
+        pdfDoc.text(
+          `report Start Date: ${startDate}`,
+          10,
+          pdfDoc.autoTable.previous.finalY + 10
+        );
+        pdfDoc.text(
+          `report End Date: ${endDate}`,
+          10,
+          pdfDoc.autoTable.previous.finalY + 20
+        );
+
+        // Add the total discount to the PDF
+        pdfDoc.text(
+          `Total Discount: ${totalDiscount}`,
+          10,
+          pdfDoc.autoTable.previous.finalY + 30
+        );
+
+        //totalsales
+        pdfDoc.text(
+          `Total Sales: ${totalSales}`,
+          10,
+          pdfDoc.autoTable.previous.finalY + 40
+        );
+        //totalrevenue
+        pdfDoc.text(
+          `Total Revenue: ${totalRevenue}`,
+          10,
+          pdfDoc.autoTable.previous.finalY + 50
+        );
+
+        pdfDoc.rect(10, pdfDoc.autoTable.previous.finalY + 5, 180, 55);
+
+        pdfDoc.save("phoneBay-sales.pdf");
+      });
+  });
+
+  // excel
+  document.getElementById("excel").addEventListener("click", () => {
+    let table = document.getElementById("ordersTable").cloneNode(true);
+
+    // console.log(table.rows);
+
+    // Remove the ACTION column (assuming it's the last column)
+    Array.from(table.rows).forEach((row) => {
+      console.log(row);
+
+      return row.lastElementChild.remove();
+    });
+
+    let worksheet = XLSX.utils.table_to_sheet(table);
+
+    //workbook
+    let workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sales");
+
+    // Generate a Blob from the Workbook
+    let wbout = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+
+    let a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style.display = "none";
+    let url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = "phoneBAy.xlsx";
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    function s2ab(s) {
+      let buf = new ArrayBuffer(s.length);
+      let view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    }
+  });
+</script>

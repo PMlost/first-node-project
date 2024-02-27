@@ -1,0 +1,129 @@
+<!-- Profile Page Content -->
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar with My Orders and Manage Address -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="list-group">
+          <a
+            href="/users/profile"
+            class="list-group-item list-group-item-action card-header bg-success text-white"
+            >My Profile</a
+          >
+          <a
+            <a
+            href="/users/order-details"
+            class="list-group-item list-group-item-action"
+            >My Orders</a
+          >
+          <a
+            href="/users/manageAddress"
+            class="list-group-item list-group-item-action"
+            >Manage Address</a
+          >
+          <a
+            href="/users/viewAddress"
+            class="list-group-item list-group-item-action"
+            >View Address</a
+          >
+          <a
+            href="/users/change-password"
+            class="list-group-item list-group-item-action"
+            >change PassworD</a
+          >
+          <a href="/users/wallet" class="list-group-item list-group-item-action"
+            >wallet
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content for My Orders or Manage Address -->
+    <!-- Main Content for Wallet -->
+    <div class="col-md-8">
+      <div class="card">
+        <!-- Wallet Details -->
+        <div class="card-header bg-success text-white">Wallet</div>
+        <div class="card-body px-4 py-3">
+          <p class="username">Welcome, <%= userName %></p>
+          <h4 class="wallet-amount mb-3">
+            Wallet Amount: <%= walletAmount ? walletAmount : 0 %>
+            <i class="fas fa-coins"></i>
+          </h4>
+          <a href="/users/shop" class="btn btn-success">Go Shopping!</a>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="referralCode" class="form-label">Referral Code</label>
+        <input
+          type="text"
+          class="form-control"
+          id="referralCode"
+          name="referralCode"
+          placeholder="Enter referral code here"
+        />
+        <button id="submitReferralCode" class="btn btn-success mt-2">
+          Submit
+        </button>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="card mt-4">
+        <div class="card-header bg-success text-white">Transactions</div>
+        <div class="card-body px-4 py-3">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Transaction ID</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(locals.transactions){%> <%
+                transactions.forEach(transaction => { %>
+                <tr>
+                  <td><%= transaction.transaction_id %></td>
+                  <td><%= transaction.description %></td>
+                  <td><%= transaction.createdAt.toDateString() %></td>
+                  <td><%= transaction.amount %></td>
+                  <td><%= transaction.type %></td>
+                </tr>
+                <% }) %> <%}%>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  document
+    .getElementById("submitReferralCode")
+    .addEventListener("click", function () {
+      const referralCode = document.getElementById("referralCode").value;
+
+      axios
+        .post("/users/verifyReferralCode", { referralCode: referralCode })
+        .then(function (response) {
+          console.log(response.data);
+          // handle success
+          console.log(response);
+          alert("Referral code applied successfully!");
+          window.location.href = "/users/wallet";
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+          alert("Failed to apply referral code");
+        });
+    });
+</script>

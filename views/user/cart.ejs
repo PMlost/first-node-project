@@ -1,0 +1,261 @@
+<style>
+  body {
+    background-color: #f8f9fa; 
+  }
+
+  .product-img {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+
+  .product-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .table td,
+  .table th {
+    vertical-align: middle;
+  }
+
+
+</style>
+
+
+
+<div class="container mt-4">
+  <h2 class="text-success mb-4">Shopping Cart</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Total</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(locals.userData){%>
+        <!-- //  -->
+        <%userData.forEach((userProductObj)=>{%>
+          
+        <!-- // -->
+        <tr>
+          <td>
+            <img
+              src="<%= userProductObj.productId.imgSrc[0]%>"
+              alt="iPhone 14"
+              class="product-img"
+            />
+          </td>
+          <td>
+            <div class="product-name"><%= userProductObj.productId.name %></div>
+          </td>
+         
+
+          <!-- //amount of individual product -->
+          <td>
+            <% 
+            let price = userProductObj.productId.price; 
+            let discountPercentage = 0;
+            if (
+              userProductObj.productId.offer && 
+              new Date() >= new Date(userProductObj.productId.offer.startDate) && 
+              new Date() <= new Date(userProductObj.productId.offer.endDate)
+            ) { 
+              discountPercentage += userProductObj.productId.offer.discountPercentage; 
+            }
+            if (
+              userProductObj.productId.categoryId.offer && 
+              new Date() >= new Date(userProductObj.productId.categoryId.offer.startDate) && 
+              new Date() <= new Date(userProductObj.productId.categoryId.offer.endDate)
+            ) { 
+              discountPercentage += userProductObj.productId.categoryId.offer.discountPercentage; 
+            }
+            if (discountPercentage > 0) {
+              price = price - (price * discountPercentage / 100); 
+            }
+          %> 
+          <%= '₹' + price %>
+          </td>
+          
+
+          <td>
+            <button
+              class="btn btn-sm btn-success increment-btn".
+              <%= userProductObj.quantity >= userProductObj.productId.stock && 'disabled' %>
+              data-product-id="<%= userProductObj.productId._id%>"
+            >
+              +
+            </button>
+            <span class="cart-total-quantity"
+              ><%= userProductObj.quantity %></span
+            >
+
+   
+
+            <button
+              class="btn btn-sm btn-danger decrement-btn"
+              <%= userProductObj.quantity === 1 && 'disabled' %>
+              data-product-id="<%= userProductObj.productId._id %>"
+            >
+              -
+            </button>
+          </td>
+         
+          <!-- //total price -->
+          <td class="total-price">
+            <%= '₹' + (userProductObj.quantity * price) %>
+          </td>
+         
+          <td>
+            <button
+              class="btn btn-sm btn-danger delete-cart-item"
+              data-product-id="<%= userProductObj.productId._id %>"
+            >
+              Remove
+            </button>
+          </td>
+        </tr>
+        <% })%> <% }%>
+
+        <!-- Add more rows as needed -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- //order Summary -->
+  <div class="row justify-content-end">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Order Summary</h5>
+          <hr />
+          <p class="grand-total"><%= userComplete.cart.totalPrice %></p>
+          <a href="/users/checkout" class="btn btn-primary" id="placeOrderButton" >Place Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ..increment/ decrement  -->
+<script defer>
+  document
+    .querySelectorAll(".increment-btn,.decrement-btn")
+    .forEach((button) => {
+      button.addEventListener("click", function () {
+        const productId = this.dataset.productId;
+
+        const quantityElement = this.closest("tr").querySelector(
+          ".cart-total-quantity"
+        );
+        const totalPriceElement =
+          this.closest("tr").querySelector(".total-price");
+
+        const decrementButton =
+          this.closest("tr").querySelector(".decrement-btn");
+
+        const plusOrMinus = this.classList.contains("increment-btn")
+          ? "increment"
+          : "decrement";
+
+        if (productId) {
+          axios
+            .post("/users/updateCart", { productId, plusOrMinus })
+            .then((response) => {
+              const updatedQuantity = response.data.updatedQuantity;
+              const totalPrice = response.data.totalPrice;
+              const grandTotal = response.data.grandTotal;
+              const stock = response.data.stock;
+       
+
+              grandTotalFn(grandTotal);
+
+              if (updatedQuantity === 1) {
+                decrementButton.disabled = true;
+              } else {
+                decrementButton.disabled = false;
+              }
+
+              //button quantity
+              quantityElement.textContent = updatedQuantity;
+              //totalprice
+              totalPriceElement.textContent = `₹${totalPrice}`;
+              // Update the total cart count in the header
+              const cartQuantity = response.data.totalQuantity;
+   
+              const incrementButton = this.closest("tr").querySelector(".increment-btn");
+              incrementButton.disabled = updatedQuantity === stock;
+
+              updateCartView(cartQuantity);
+              checkCartState();
+            })
+            .catch((error) => {
+              console.error("Error adding to cart:", error);
+            });
+        }
+      });
+
+
+    });
+      //delete product from cart.ejs
+      document.querySelectorAll(".delete-cart-item").forEach((removeBtn) => {
+        removeBtn.addEventListener("click", function () {
+          const productId = this.dataset.productId;
+
+          //adding confirmation
+          const confirmation = confirm("do you want to delete this iteM?")
+
+          if(confirmation){
+            axios.post("/users/deleteCart", { productId }).then((response) => {
+            const cartQuantity = response.data.totalQuantity;
+            const grandTotal = response.data.grandTotal;
+         
+
+            grandTotalFn(grandTotal)
+
+            const tableRow = document
+              .querySelector(`[data-product-id="${productId}"]`)
+              .closest("tr");
+
+            if (tableRow) {
+              tableRow.parentNode.removeChild(tableRow);
+            }
+            updateCartView(cartQuantity);
+            checkCartState();
+          });
+          }
+ 
+        });
+      });
+      //grandTotal
+
+      function grandTotalFn(grandTotal) {
+        document.querySelector(".grand-total").textContent = grandTotal
+      }
+
+      //update cart quanity
+      function updateCartView(totalQuantity) {
+        document.querySelector(".cart-total-count").textContent = totalQuantity;
+      }
+    //
+      function checkCartState() {
+  const cartItems = document.querySelectorAll('.product-name');
+  const placeOrderButton = document.getElementById('placeOrderButton');
+
+  if (cartItems.length == 0) {
+    placeOrderButton.classList.add('disabled');
+  } else {
+    placeOrderButton.classList.remove('disabled');
+  }
+}
+checkCartState();
+</script>

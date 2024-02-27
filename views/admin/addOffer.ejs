@@ -1,0 +1,93 @@
+<div class="container">
+  <h1 class="text-center mb-4">Add offer</h1>
+
+  <h4 class="text-center text-primary my-1"><%=message%></h4>
+  <form action="/admin/add-offer" method="POST" id="offer-form">
+    <div class="mb-3">
+      <label for="offerName" class="form-label">Offer Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="offerName"
+        name="offerName"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="offerType" class="form-label">Offer type</label>
+      <select class="form-select" id="offerTpe" name="type" required>
+        <option value="product">Product</option>
+        <option value="category">Category</option>
+        <option value="referral">Referral</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="discount" class="form-label">Discount (%)</label>
+      <input
+        type="number"
+        class="form-control"
+        id="discountPercentage"
+        name="discountPercentage"
+        min="1"
+        max="100"
+        required
+      />
+    </div>
+    <!-- <div class="mb-3">
+      <label for="maxValue" class="form-label">Max Value</label>
+      <input
+        type="number"
+        class="form-control"
+        id="maxValue"
+        name="maxValue"
+        required
+      />
+    </div> -->
+    <!-- <div class="mb-3">
+      <label for="minValue" class="form-label">Min Value</label>
+      <input
+        type="number"
+        class="form-control"
+        id="minValue"
+        name="minValue"
+        required
+      />
+    </div> -->
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Start Date</label>
+      <input
+        type="date"
+        class="form-control"
+        id="startDate"
+        name="startDate"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="endDate" class="form-label">End Date</label>
+      <input
+        type="date"
+        class="form-control"
+        id="endDate"
+        name="endDate"
+        required
+      />
+    </div>
+    <button cl type="submit" class="btn btn-primary form-btn">Save</button>
+    <a href="/admin/view-offer" class="btn btn-info ms-2">Back</a>
+  </form>
+</div>
+
+<script>
+  const couponNameInput = document.getElementById("offerName");
+  document.addEventListener("click", (e) => {
+    if (e.target.matches(".form-btn")) {
+      const cleanedValue = couponNameInput.value.trim().replace(/\s+/g, "");
+      const requiredValue = cleanedValue.substring(0, 8);
+
+      couponNameInput.value = requiredValue;
+    }
+  });
+</script>

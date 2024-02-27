@@ -1,0 +1,582 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb mb-3 bg-light" style="padding: 10px">
+        <a
+          style="color: black"
+          class="breadcrumb-item text-decoration-none"
+          href="/home"
+          >Home</a
+        >
+        <a class="breadcrumb-item text-decoration-none text-dark" href="/cart"
+          >Cart</a
+        >
+        <span class="breadcrumb-item active text-dark">Checkout</span>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Breadcrumb End -->
+
+<% if (locals.errorMessage) { %>
+  <div class="alert alert-danger error-message" role="alert">
+    <%= errorMessage %>
+  </div>
+  <% } %>
+
+<!-- Checkout Start -->
+<form
+  action="/users/placeOrder"
+  method="post"
+  class="container-fluid"
+  id="checkoutForm"
+>
+  <div class="row px-xl-5">
+    <div class="col-lg-8">
+      <h5 class="section-title position-relative text-uppercase mb-3"></h5>
+      <div class="p-30">
+        <!-- //selected  -->
+        <% if(locals.addressDetails && addressDetails.length>0){%>
+
+        <div class="card col-lg-8 mb-4">
+          <%addressDetails.forEach((addressDetail)=>{%>
+
+          <div class="card-header bg-success text-white">
+            Select this Address for order
+          </div>
+          <div class="card-body">
+            <div class="mb-5" id="shipping-address">
+              <div class="tr p-30">
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">First Name:</div>
+                  <div class="col-md-9"><%= addressDetail.firstname %></div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">Last Name:</div>
+                  <div class="col-md-9"><%= addressDetail.lastname %></div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">Address:</div>
+                  <div class="col-md-9"><%= addressDetail.address %></div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">Country:</div>
+                  <div class="col-md-9"><%= addressDetail.country %></div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">City:</div>
+                  <div class="col-md-9"><%= addressDetail.city %></div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">State:</div>
+                  <div class="col-md-9"><%= addressDetail.state %></div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-3 font-weight-bold">Zip Code:</div>
+                  <div class="col-md-9"><%= addressDetail.zipcode %></div>
+                </div>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="selectedAddress"
+                  id="firstDivRadio"
+                  value="<%= addressDetail._id %>"
+                />
+                <label class="form-check-label" for="firstDivRadio">
+                  Select this address
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <% })%> <%}else{%>
+          <div class="mb-4">Create Selected</div>
+          <%} %>
+        </div>
+
+        <!-- New Address Section -->
+        <div class="col-lg-8">
+          <h5 class="section-title position-relative text-uppercase mb-3">
+            <span class="pr-3">New Address</span>
+          </h5>
+          <div class="p-30">
+            <!-- Your existing code for new address goes here -->
+            <div class="mb-5 text-light" id="shipping-address">
+              <div class="tr p-30">
+                <div class="row">
+                  <div id="hidden-division">
+                    <div class="row">
+                      <div class="col-md-5 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="firstname"
+                          placeholder="First Name"
+                        />
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="lastname"
+                          placeholder="Last Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-11 form-group">
+                      <input
+                        class="form-control mb-3"
+                        name="mno"
+                        type="text"
+                        placeholder="Number"
+                      />
+                    </div>
+                    <div class="col-md-11 form-group">
+                      <input
+                        class="form-control mb-3"
+                        type="text"
+                        name="address"
+                        placeholder="Address"
+                      />
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="country"
+                          placeholder="Country"
+                        />
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="city"
+                          placeholder="City"
+                        />
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="state"
+                          placeholder="State"
+                        />
+                      </div>
+                      <div class="col-md-5 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="zip"
+                          placeholder="Post code"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <h5
+                    style="margin-right: 4%; color: white"
+                    class="col-md-12 form-group section-title position-relative text-uppercase mb-3"
+                  >
+                    <span class="pr-3">Choose Address</span>
+                  </h5>
+
+                  <div class="form-check text-black">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="selectedAddress"
+                      id="newAddressRadio"
+                      value="0"
+                    />
+                    <label class="form-check-label" for="newAddressRadio">
+                      Enter a new address
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coupons and Order Total Section -->
+
+    <!-- ..... -->
+
+    <!-- Coupons and Order Total Section -->
+    <div class="col-lg-4">
+      <h5 class="section-title position-relative text-uppercase mb-3">
+        <span class="pr-3">Coupons</span>
+      </h5>
+      <div class="input-group mb-3">
+        <!-- Your existing code for coupons goes here -->
+        <div class="input-group-append mt-2">
+          <input
+            style="border-radius: 5px; height: 38px"
+            name="coupon"
+            id="coupon"
+          />
+          <button
+            style="height: 38px"
+            type="button"
+            class="btn btn-primary ms-2"
+            onclick="applyCoupon()"
+          >
+            Apply</button
+          >&nbsp; &nbsp;
+          <a
+            data-toggle="modal"
+            class="btn btn-warning btn-sm showCouponsModal"
+            type="button"
+            id="showCouponsModal"
+            >Show Coupons</a
+          >
+        </div>
+        <div>
+          <h6 style="color: red; margin-top: 10px" id="msg"></h6>
+        </div>
+      </div>
+      <hr class="mb-3" />
+      <h5 class="section-title position-relative text-uppercase mb-3">
+        <span class="pr-3">Order Total</span>
+      </h5>
+      <div class="p-30 mb-3">
+        <!-- Your existing code for order total goes here -->
+        <div class="border-bottom">
+          <div class="d-flex justify-content-between">
+            <h6 class="mb-3">Products</h6>
+            <h6 class="mb-3">Price</h6>
+          </div>
+
+          <!-- // -->
+          <% checkOutDetails.item.forEach((productObj)=>{%>
+
+          <div class="d-flex justify-content-between">
+            <p class="text-uppercase">
+              <%= productObj.productId.name %> x <%= productObj.quantity %>
+            </p>
+            <p><%= productObj.productId.price * productObj.quantity %></p>
+          </div>
+          <%}) %>
+        </div>
+
+        <div class="border-bottom pt-3 pb-2">
+          <div class="d-flex justify-content-between mb-3">
+            <h6>Subtotal</h6>
+            <input
+              id="subTotal"
+              value="<%=checkOutDetails.totalPrice  %>"
+              type="hidden"
+            />
+            <h6
+              class="totalPriceCheck"
+              data-price-check="<%=checkOutDetails.totalPrice  %>"
+            >
+              <%= checkOutDetails.totalPrice %>
+            </h6>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h6 class="font-weight-medium">Discount</h6>
+            <h6 id="discounted" class="font-weight-medium">--</h6>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h6 class="font-weight-medium">Reduction Amount</h6>
+            <h6 id="rAmount" class="font-weight-medium">--</h6>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h6 class="font-weight-medium">Delivery charges</h6>
+            <h6 id="deliveryCharge" class="font-weight-medium">
+              --
+            </h6>
+          </div>
+        </div>
+        <div class="pt-2">
+          <div class="d-flex justify-content-between mt-2">
+            <h5>Total</h5>
+            <h5 id="grandTotal">Rs <%= checkOutDetails.totalPrice %></h5>
+            <!-- final amount after discount -->
+            <input
+              id="finalAmount"
+              type="hidden"
+              value=" <%= checkOutDetails.totalPrice %>"
+              name="amount"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <h5 class="section-title position-relative text-uppercase mb-3">
+          <span class="pr-3">Payment</span>
+        </h5>
+        <div class="p-30">
+          <!-- Your existing code for payment options goes here -->
+          <% if (checkOutDetails.totalPrice < 1000) { %>
+            <div class="form-group">
+              <!-- COD option is available -->
+              <div class="custom-control custom-radio">
+                <input
+                  type="radio"
+                  class="custom-control-input"
+                  checked
+                  name="payment"
+                  id="COD"
+                  value="COD"
+                />
+                <label class="custom-control-label" for="COD">COD</label>
+              </div>
+            </div>
+          <% } %>
+          <div class="form-group">
+            <!-- Online payment option is always available -->
+            <div class="custom-control custom-radio">
+              <input
+                type="radio"
+                class="custom-control-input"
+                <% if (checkOutDetails.totalPrice >= 1000) { %>checked<% } %>
+                name="payment"
+                id="Online"
+                value="Online"
+              />
+              <label class="custom-control-label" for="Online">Online payment</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <!-- Wallet payment option -->
+            <div class="custom-control custom-radio">
+              <input
+                type="radio"
+                class="custom-control-input"
+                name="payment"
+                id="Wallet"
+                value="Wallet"
+              />
+              <label class="custom-control-label" for="Wallet">Wallet</label>
+            </div>
+          </div>
+            <button
+              style="height: 40px; align-items: center"
+              class="btn btn-block btn-primary font-weight-bold mt-3"
+              type="submit"
+            >
+              Place Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- model for show coupons -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+  style="border-radius: 10px"
+>
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content bg-white text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Coupons</h5>
+      </div>
+      <div class="modal-body">
+        <!-- Replace this with hardcoded values -->
+        <% if(couponArray.length<=0) {%>
+        <h6 class="mx-4 text-uppercase text-danger">no coupon found</h6>
+
+        <% } else {%>
+        <!-- // -->
+        <% couponArray.forEach((coupon, index) => { %>
+        <!-- // -->
+        <%if(coupon.isCouponListed) { %>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <span
+              style="color: rgb(6, 164, 87); font-size: x-large"
+              id="<%= coupon._id %>"
+              ><strong><%= coupon.name %></strong></span
+            >
+            <button
+              class="bg-light"
+              style="border: none"
+              onclick="copyCouponCode('<%= coupon._id %>')"
+            >
+              <i
+                style="color: rgba(154, 51, 238, 0.852)"
+                class="fa fa-copy"
+              ></i>
+            </button>
+            <h6>Min purchase value: <%= coupon.minimumvalue %></h6>
+            <h6>Expires in: <%= coupon.expiryDate.toLocaleDateString() %></h6>
+          </div>
+        </div>
+
+        <hr />
+        <% } %> <% }); %> <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- // -->
+<script>
+  let radio1 = document.getElementById("firstDivRadio");
+  let radio2 = document.getElementById("newAddressRadio");
+  let hiddenDiv = document.getElementById("hidden-division");
+
+  // toggle the address fields
+  function toggleAddressFields() {
+    if (radio1.checked) {
+      hiddenDiv.style.display = "none"; // Hide  address fields
+      let inputs = hiddenDiv.getElementsByTagName("input");
+      hiddenDiv
+        .querySelectorAll("input")
+        .forEach((input) => (input.value = ""));
+    } else {
+      hiddenDiv.style.display = "block"; // Show  address fields
+    }
+  }
+
+  // event listeners to both radio buttons
+  radio1.addEventListener("change", toggleAddressFields);
+  radio2.addEventListener("change", toggleAddressFields);
+
+  toggleAddressFields();
+
+  let form = document.getElementById("checkoutForm");
+
+  form.addEventListener("submit", function (event) {
+    if (!radio1.checked && !radio2.checked) {
+      event.preventDefault();
+    }
+
+    if (radio2.checked) {
+      let inputs = hiddenDiv.getElementsByTagName("input");
+
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === "") {
+          event.preventDefault();
+
+          alert("please fill all details");
+          return;
+        }
+      }
+    }
+  });
+
+  const totalPriceElement = document.querySelector("[data-price-check]");
+  let priceCheck = totalPriceElement.dataset.priceCheck;
+  // console.log(priceCheck);
+
+  if (priceCheck == 0) {
+    // alert("no items in cart ");
+    window.location.href = "/users/shop";
+  }
+
+  //model
+  document.addEventListener("click", function (e) {
+    let modal = document.getElementById("exampleModal");
+    let modalInstance = new bootstrap.Modal(modal);
+
+    if (e.target.matches("#showCouponsModal")) {
+      modalInstance.show();
+    }
+  });
+
+  //copy couponcode
+  function copyCouponCode(couponId) {
+    let copyCouponCode = document.querySelector(
+      `[id= '${couponId}']`
+    ).textContent;
+
+    navigator.clipboard
+      .writeText(copyCouponCode)
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "copied!",
+          text: "Coupon code copied to clipboard",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Failed to copy coupon code",
+        });
+      });
+  }
+  //apply coupon
+  function applyCoupon(params) {
+    let currentPrice = document.getElementById("subTotal").value;
+    const couponCode = document.getElementById("coupon").value;
+
+    axios
+      .post("/users/applyCoupon", { currentPrice, couponCode })
+      .then((response) => {
+        if (response.data.success) {
+          const { couponData, discountedAmount } = response.data;
+
+          const discounted = document.querySelector("#discounted");
+          discounted.innerText = couponData.discount + "%";
+
+          const reducedAmount = document.querySelector("#rAmount");
+          reducedAmount.innerText = discountedAmount;
+
+          const grandTotalInput = document.querySelector("#grandTotal");
+          let deliveryCharge = parseInt (document.getElementById("deliveryCharge").innerText)
+          console.log(deliveryCharge);
+          let finalAmount = (currentPrice - discountedAmount) +deliveryCharge ;
+          // ../
+      
+
+          
+          document.getElementById("finalAmount").value = finalAmount;
+          grandTotalInput.innerText = finalAmount;
+          
+          toastr.success(response.data.couponMessage);
+        } else {
+          toastr.error(response.data.couponMessage);
+        }
+
+        //
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
+  // delivery charge
+  function calculateDeliveryCharge() {
+
+  let totalPrice = parseFloat(document.getElementById("subTotal").value);
+
+  let deliveryCharge = totalPrice < 16000 ? 1000 : 0;
+
+  document.getElementById("deliveryCharge").innerText = deliveryCharge;
+
+  let grandTotal = totalPrice + deliveryCharge;
+
+  document.getElementById("grandTotal").innerText = "Rs " + grandTotal;
+
+  document.getElementById("finalAmount").value = grandTotal;
+}
+
+
+calculateDeliveryCharge();
+
+</script>

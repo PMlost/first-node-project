@@ -1,0 +1,57 @@
+<div
+  class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+>
+  <div class="row g-0">
+    <div class="col-md-6 d-none d-md-block">
+      <img
+        style="width: 425px"
+        src="/images/adminLogin.png"
+        alt="Image"
+        class="img-fluid side-image"
+      />
+    </div>
+    <div class="col-md-6">
+      <div class="container py-3">
+        <h2 class="text-center mb-3">Sign in</h2>
+        <% if (locals.errorMessage) { %>
+        <p class="error-message alert alert-danger"><%= errorMessage %></p>
+        <% } %>
+
+        <form
+          class="needs-validation"
+          novalidate
+          action="/admin/login"
+          method="post"
+        >
+          <div class="mb-2">
+            <label for="email" class="form-label">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="Enter email"
+              name="email"
+              required
+            />
+            <div class="invalid-feedback">
+              Please provide a valid email address.
+            </div>
+          </div>
+          <div class="mb-2">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Enter password"
+              name="password"
+              required
+            />
+            <div class="invalid-feedback">Please enter a password.</div>
+          </div>
+          <button type="submit" class="btn btn-danger">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

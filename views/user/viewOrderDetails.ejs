@@ -1,0 +1,248 @@
+<div class="container-fluid">
+  <div class="container">
+    <% if(orderDetails.status === "cancelled") { %>
+    <!-- Cancelled Order Section -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <!-- Title -->
+        <div class="text-center py-3">
+          <h2 style="color: black" class="h5 mx-5 mb-0">
+            <a href="#" class="text-muted"></a> Order #<%= orderDetails._id %>
+          </h2>
+        </div>
+
+        <!-- Product and Payment Section -->
+        <div style="color: black" class="card mb-4">
+          <div class="card-body">
+            <!-- Product Details -->
+            <div class="mb-4">
+              <% let totalAmount = 0; %> <% for(let key of
+              orderDetails.products.item) { %> <% totalAmount += key.price *
+              key.quantity; %>
+              <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                  <img
+                    src="<%= key.productId.imgSrc[0] %>"
+                    alt=""
+                    width="120"
+                    class="img-fluid rounded"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h5 class="mb-0 text-uppercase"><%= key.productId.name %></h5>
+                  <p class="mb-0">Quantity: <%= key.quantity %></p>
+                  <p class="mb-0">orginal Price: <%= key.price %></p>
+                </div>
+              </div>
+              <% } %>
+
+              <!-- Total Amount -->
+              <div class="text-end">
+                <p class="fw-bold mb-0">
+                  Total:
+                  <span style="color: black"
+                    ><%= totalAmount.toFixed(2) %></span
+                  >
+                </p>
+              </div>
+            </div>
+            <hr class="my-4" />
+            <!-- Payment and Address Details -->
+            <div class="row">
+              <div class="col-lg-6">
+                <h3 class="h4 mb-4">Payment Method</h3>
+                <p>
+                  <%= orderDetails.payment.method %> <br />
+                  Total: <%= orderDetails.payment.amount %>
+                </p>
+                <% if(orderDetails.razorPaymentDetails &&
+                orderDetails.payment.method !== "COD") { %>
+                <h3 class="h6">Payment Details</h3>
+                <p>
+                  Receipt no: <%= orderDetails.razorPaymentDetails.receipt %>
+                </p>
+                <p>Status: <%= orderDetails.razorPaymentDetails.status %></p>
+                <% } %>
+              </div>
+              <div class="col-lg-6">
+                <h3 class="h4">Billing address</h3>
+                <address>
+                  <strong
+                    ><%= orderDetails.address.firstname %> <%=
+                    orderDetails.address.lastname %></strong
+                  ><br />
+                  <%= orderDetails.address.address %><br />
+                  Pin: <%= orderDetails.address.zipcode %> <br />
+                  Phone: <%= orderDetails.address.mobileN %>
+                </address>
+                <div>
+                  <h5 class="text-uppercase text-danger">Order Cancelled</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% } else { %>
+    <!-- Non-Cancelled Order Section -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <!-- Title -->
+        <div class="text-center py-3">
+          <h2 style="color: black" class="h5 mx-5 mb-0">
+            <a href="#" class="text-muted"></a> Order #<%= orderDetails._id %>
+          </h2>
+        </div>
+
+        <!-- Main content -->
+        <div class="row mx-4">
+          <!-- Product and Payment Section -->
+          <div class="col-lg-11">
+            <!-- Product Details -->
+            <div
+              style="background-color: #f8f9fa; color: black"
+              class="card mb-4"
+            >
+              <div class="card-body">
+                <!-- Product Details -->
+                <div class="mb-4">
+                  <% let totalAmount = 0; %> <% for(let key of
+                  orderDetails.products.item) { %> <% totalAmount += key.price *
+                  key.quantity; %>
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="<%= key.productId.imgSrc[0] %>"
+                        alt=""
+                        width="140"
+                        class="img-fluid rounded"
+                      />
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mb-0 text-uppercase">
+                        <%= key.productId.name %>
+                      </h5>
+                      <p class="mb-0">Quantity: <%= key.quantity %></p>
+                      <p class="mb-0">orginal Price: <%= key.price %></p>
+                    </div>
+                  </div>
+                  <% } %> 
+                  <!-- Total Amount -->
+                  <div class="text-end">
+                    <p class="fw-bold mb-0">
+                      Total:
+                      <span style="color: black"
+                        ><%= orderDetails.payment.amount %></span
+                      
+                    </p>
+                    
+                  </div>
+                </div>
+                <hr class="my-4" />
+                <!-- Payment and Address Details -->
+                <div class="row">
+                  <div class="col-lg-6">
+                    <h3 class="h4 mb-4">Payment Method</h3>
+                    <p>
+                      <%= orderDetails.payment.method %> <br />
+                      Total: <%= orderDetails.payment.amount %>
+                    </p>
+                    <% if(orderDetails.razorPaymentDetails &&
+                    orderDetails.payment.method !== "COD") { %>
+                    <h3 class="h6">Payment Details</h3>
+                    <p>
+                      Receipt no: <%= orderDetails.razorPaymentDetails.receipt
+                      %>
+                    </p>
+                    <p>
+                      Status: <%= orderDetails.razorPaymentDetails.status %>
+                    </p>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-6">
+                    <h3 class="h4">Billing address</h3>
+                    <address>
+                      <strong
+                        ><%= orderDetails.address.firstname %> <%=
+                        orderDetails.address.lastname %></strong
+                      ><br />
+                      <%= orderDetails.address.address %><br />
+                      Pin: <%= orderDetails.address.zipcode %> <br />
+                      Phone: <%= orderDetails.address.mobileN %>
+                    </address>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Section for Buttons and Shipping Address -->
+            <div
+              style="background-color: #f8f9fa; color: black"
+              class="card mb-4"
+            >
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-lg-6">
+                    <!-- Button for Order Actions -->
+                    <% if(orderDetails.status == "Delivered") { %> <% const
+                    currentDate = new Date(); const cutoffDate = new Date();
+                    cutoffDate.setDate(currentDate.getDate() - 14); const
+                    createdAtDate = new Date(orderDetails.createdAt); if
+                    (createdAtDate <= cutoffDate) { %>
+                    <button
+                      style="display: block"
+                      type="button"
+                      class="btn btn-danger"
+                      disabled
+                    >
+                      Return Item
+                    </button>
+                    <% } else { %>
+                    <a
+                      style="display: block"
+                      href="/returnOrder?id=<%= orderDetails._id %>"
+                      class="btn btn-danger"
+                      >Return Item</a
+                    >
+                    <% } %> <% } else if(orderDetails.status == "cancelled") {
+                    %>
+                    <h5 class="text-uppercase text-danger">Order Cancelled</h5>
+                    <% } else if(orderDetails.status == "returned") { %>
+                    <h6>Returned</h6>
+                    <% } else if(orderDetails.status == "return success") { %>
+                    <h6>Returned Successfully</h6>
+                    <% } else { %>
+                    <a
+                      href="/users/cancel-order?id=<%= orderDetails._id %>"
+                      class="btn btn-danger text-uppercase font-weight-bold"
+                      ><small>Cancel Order</small></a
+                    >
+                    <% } %>
+                  </div>
+                  <div class="col-lg-6">
+                    <% if(orderDetails.status !== "cancelled") { %>
+                    <div class="text-lg-end mt-3 mt-lg-0">
+                      <!-- Download Invoice Button -->
+                      <div class="col-lg-6">
+                        <a
+                          href="/users/view-invoice?id=<%= orderDetails._id %>"
+                          class="btn btn-primary text-uppercase font-weight-bold"
+                        >
+                          <small>view Invoice</small>
+                        </a>
+                      </div>
+                    </div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>

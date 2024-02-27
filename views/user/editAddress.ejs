@@ -1,0 +1,120 @@
+<section class="bg-light p-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form
+          action="/users/editAddress"
+          method="post"
+          style="background-color: #87cefa; border-radius: 10px"
+          class="rounded-5 p-4"
+        >
+          <h4 class="text-center mb-4">Edit Address</h4>
+
+          <div class="form-group">
+            <label for="firstname">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="firstname"
+              placeholder="First name"
+              value="<%= addressDetail.firstname %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastname"
+              placeholder="Last name"
+              value="<%= addressDetail.lastname %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input
+              type="text"
+              class="form-control"
+              name="country"
+              placeholder="Country"
+              value="<%= addressDetail.country %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Address"
+              name="address"
+              value="<%= addressDetail.address %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="city">City</label>
+            <input
+              type="text"
+              class="form-control"
+              name="city"
+              placeholder="City"
+              value="<%= addressDetail.city %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="state">State</label>
+            <input
+              type="text"
+              class="form-control"
+              name="state"
+              placeholder="State"
+              value="<%= addressDetail.state %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="zip">ZIP</label>
+            <input
+              type="text"
+              class="form-control"
+              name="zipcode"
+              placeholder="zipcode"
+              value="<%= addressDetail.zipcode %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="mno">Phone</label>
+            <input
+              type="tel"
+              class="form-control"
+              name="mobileN"
+              placeholder="Phone"
+              value="<%= addressDetail.mobileN %>"
+              required
+            />
+          </div>
+
+          <div class="text-center mt-4">
+            <input type="hidden" name="id" value="<%= addressDetail._id %>" />
+            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+            <a href="/users/profile" class="btn btn-secondary btn-lg ml-2"
+              >Go Back</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

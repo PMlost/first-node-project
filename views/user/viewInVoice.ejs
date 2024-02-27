@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Invoice</title>
+    <style>
+      .start {
+        background: #fff;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      .btn::before {
+        background-color: white;
+      }
+      .card {
+        border-radius: 30px;
+        border: 1px solid #333;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      }
+      .card-body {
+        padding: 2rem;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: collapse;
+      }
+      .table th,
+      .table td {
+        border: 1px solid #333;
+        padding: 1rem;
+        text-align: left;
+      }
+      @media screen and (max-width: 600px) {
+        .table th,
+        .table td {
+          display: block;
+          text-align: right;
+        }
+        .table th::before {
+          content: attr(data-label);
+          float: left;
+          text-transform: uppercase;
+          font-weight: bold;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container start">
+      <center>
+        <h3>Invoice</h3>
+      </center>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card" id="invoice">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 text-center">
+                  <p class="font-weight-bold mb-1">
+                    Invoice <%= orderDetails._id %>
+                  </p>
+                  <p class="text-muted">
+                    Invoice created date: <%=
+                    orderDetails.createdAt.toLocaleDateString() %>
+                  </p>
+                </div>
+                <div class="col-md-6 text-right">
+                  <p class="font-weight-bold mb-4">Company Name: phoneBay</p>
+                  <button
+                    style="background-color: white"
+                    onclick="generatePDF()"
+                    class="btn mb-2 btn-info ml-auto mr-5 float-end"
+                  >
+                    Download Invoicw
+                  </button>
+                </div>
+              </div>
+
+              <hr class="my-2" />
+
+              <div class="row pb-5 p-5">
+                <div class="col-md-6">
+                  <p class="font-weight-bold mb-4">Client Information</p>
+                  <p class="mb-1">
+                    <%= orderDetails.address.firstname %> <%=
+                    orderDetails.address.lastname %>
+                  </p>
+                  <p class="mb-1">
+                    <%= orderDetails.address.city %><br /><%=
+                    orderDetails.address.zipcode %><br /><%=
+                    orderDetails.address.city %><br /><%=
+                    orderDetails.address.state %>
+                  </p>
+                  <p class="mb-1"><%= orderDetails.address.mobileN %></p>
+                </div>
+
+                <div class="col-md-6 text-right">
+                  <p class="font-weight-bold mb-4">Payment Details</p>
+                  <p class="mb-1">
+                    <span class="text-muted">Payment Type: </span><%=
+                    orderDetails.payment.method %>
+                  </p>
+                  <p class="mb-1">
+                    <span class="text-muted">Receipt No: </span><%=
+                    orderDetails.razorPaymentDetails.receipt %>
+                  </p>
+                </div>
+              </div>
+              <div class="row pr-5 pl-5 mb-5">
+                <div class="table-responsive">
+                  <table class="table" id="invoice">
+                    <thead>
+                      <tr>
+                        <th
+                          class="border-0 text-uppercase small font-weight-bold"
+                        >
+                          No
+                        </th>
+                        <th
+                          class="border-0 text-uppercase small font-weight-bold"
+                        >
+                          Item
+                        </th>
+                        <th
+                          class="border-0 text-uppercase small font-weight-bold"
+                        >
+                          Quantity
+                        </th>
+                        <th
+                          class="border-0 text-uppercase small font-weight-bold"
+                        >
+                          Price
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% let totalAmount = 0; %> <% for(let i = 0; i <
+                      orderDetails.products.item.length; i++) { %> <% let item =
+                      orderDetails.products.item[i]; %> <% totalAmount +=
+                      item.price * item.quantity; %>
+                      <tr>
+                        <td><%= i + 1 %></td>
+                        <td><%= item.productId.name %></td>
+                        <td><%= item.quantity %></td>
+                        <td>₹<%= item.price %></td>
+                      </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="row pr-5 pl-5 mb-5">
+                <div class="col-md-12 text-right">
+                  <p class="font-weight-bold mb-4">
+                    Total Amount: ₹<%= orderDetails.payment.amount %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+      function generatePDF() {
+        const element = document.getElementById("invoice");
+        var opt = {
+          margin: 1,
+          filename: "phoneBay.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+        };
+        html2pdf().set(opt).from(element).save("phoneBay.pdf");
+      }
+    </script>
+  </body>
+</html>
+//

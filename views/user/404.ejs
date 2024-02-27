@@ -1,0 +1,27 @@
+<div
+  class="container-fluid bg-dark text-white min-vh-100 d-flex align-items-center justify-content-center"
+  style="
+    background-image: url('https://picsum.photos/id/1042/1920/1080?random');
+    background-size: cover;
+    background-position: center;
+  "
+>
+  <div class="row">
+    <div class="col-12 text-center">
+      <h1 class="display-4 mb-4">Oops! Page Not Found</h1>
+
+      <% if(error){ %>
+      <p></p>
+      <p class="lead"><%= error %></p>
+
+      <% }else{ %>
+      <p class="lead">
+        The page you're looking for doesn't seem to exist. Maybe you mistyped
+        the URL or it's been removed.
+      </p>
+
+      <% } %>
+      <a href="/users/shop" class="btn btn-primary px-4">Go Shopping!</a>
+    </div>
+  </div>
+</div>

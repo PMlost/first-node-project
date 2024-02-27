@@ -1,0 +1,156 @@
+<div class="container">
+  <h2>Edit Product</h2>
+
+  <% if (locals.message) { %>
+  <div class="alert alert-danger" role="alert"><%= message %></div>
+  <% } %>
+
+  <form
+    action="/admin/edit-product/?id=<%=product._id%>"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <!-- name-->
+    <div class="mb-3">
+      <label for="name" class="form-label">name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        value="<%= product.name %>"
+        name="name"
+        required
+      />
+    </div>
+
+    <!-- Category Input -->
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <select class="form-control" id="category" name="category" required>
+        <option selected disabled>Select Category</option>
+
+        <% if(locals.categoryArray){ %>
+        <!-- // -->
+        <%categoryArray.forEach((category)=>{%>
+        <option value="<%= category.name %>"><%= category.name %></option>
+
+        <%}) }else{%>
+        <h1>No Categories to add</h1>
+        <%}%>
+      </select>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="price"
+        value="<%= product.price %>"
+        name="price"
+        required
+      />
+    </div>
+
+    <!-- Stock Input -->
+    <div class="mb-3">
+      <label for="stock" class="form-label">Stock</label>
+      <input
+        type="number"
+        class="form-control"
+        id="stock"
+        value="<%= product.stock %>"
+        name="stock"
+        required
+      />
+    </div>
+
+    <!-- Description Input -->
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <input
+        id="description"
+        name="description"
+        class="form-control input-md highlight"
+        required=""
+        type="text"
+        value="<%=product.description%>"
+        required
+      />
+    </div>
+    <!-- rating -->
+
+    <!-- <label
+      style="color: white"
+      class="col-md-4 control-label"
+      for="product_name"
+      >Rating</label
+    >
+    <br />
+    <input
+      id="product_name"
+      name="pRating"
+      placeholder="Market Rating"
+      class="form-control input-md highlight"
+      required=""
+      type="text"
+    /> -->
+
+    <div class="mb-3 d-flex flex-wrap">
+      <% product.imgSrc.forEach((imgUrl, index) => { %>
+      <div class="mb-3 position-relative">
+        <img style="width: 50px; height: 50px" src="<%= imgUrl %>" alt="" />
+        <button
+          type="button"
+          class="close btn-close"
+          aria-label="Close"
+          data-index="<%= index %>"
+        ></button>
+      </div>
+      <% }) %>
+    </div>
+    <br />
+    <!-- Image Input -->
+    <div class="mb-3">
+      <label for="image" class="form-label">Image</label>
+      <input
+        type="file"
+        class="form-control"
+        id="image"
+        name="image"
+        multiple
+        required
+      />
+    </div>
+    <input type="hidden" value="<%=product._id%>" id="productId" />
+    <button type="submit" class="btn btn-success">Update Product</button>
+    <a href="/admin/view-product" class="btn btn-primary"> back </a>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", (event) => {
+    const closeButtons = document.querySelectorAll(".btn-close");
+    closeButtons.forEach((button) => {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const parentDiv = event.target.parentNode;
+        const imageUrl = parentDiv.querySelector("img").src;
+        const productId = document.getElementById("productId").value;
+
+        try {
+          const response = await axios.post("/admin/deleteImage", {
+            productId,
+            imageUrl,
+          });
+          // console.log(response.data.message);
+          parentDiv.style.display = "none";
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    });
+  });
+</script>

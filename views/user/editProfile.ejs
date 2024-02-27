@@ -1,0 +1,71 @@
+<section class="p-t-40 p-b-116">
+  <div class="container">
+    <div class="flex-w flex-tr">
+      <div class="size-210 bor10 p-lr-70 p-t-20 p-b-70 p-lr-15-lg w-full-md">
+        <form
+          style="background-color: #6eb7e4; border-radius: 10px"
+          action="/users/edit-profile?id=<%= userDetail._id %>    "
+          method="post"
+          class="p-4"
+          onsubmit="return validate()"
+        >
+          <h4 style="color: white" class="mtext-105 cl2 txt-center p-b-30">
+            Update Details
+          </h4>
+
+          <label style="color: white">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="John Doe"
+            id="name"
+            name="name"
+            value="<%= userDetail.name %>"
+            required
+          />
+          <span style="color: rgb(255, 83, 31)" id="Name"></span>
+          <br />
+
+          <label style="color: white">Email</label>
+          <input
+            type="text"
+            class="form-control"
+            id="email"
+            placeholder="john@example.com"
+            name="email"
+            value="<%= userDetail.email %>"
+            required
+          />
+          <span style="color: rgb(255, 83, 31)" id="Email"></span>
+          <br />
+
+          <label style="color: white">Mobile</label>
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="1234567890"
+            name="number"
+            value="<%= userDetail.mobile %>"
+            required
+          />
+          <span style="color: rgb(255, 83, 31)" id="Number"></span>
+          <br />
+          <br />
+          <div class="d-flex justify-content-center mx-4 mb-5 mb-lg-4">
+            <button
+              style="margin-right: 15px"
+              type="submit"
+              value="update"
+              class="btn btn-primary btn-lg"
+              onclick=""
+            >
+              Save</button
+            >;
+            <a href="profile" class="btn btn-secondary ml-2 btn-lg">Go Back</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

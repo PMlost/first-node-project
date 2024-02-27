@@ -1,0 +1,151 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar with My Orders and Manage Address -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="list-group">
+          <a
+            href="/users/profile"
+            class="list-group-item list-group-item-action card-header bg-success text-white"
+            >My Profile</a
+          >
+          <a
+            <a
+            href="/users/order-details"
+            class="list-group-item list-group-item-action"
+            >My Orders</a
+          >
+          <a
+            href="/users/manageAddress"
+            class="list-group-item list-group-item-action"
+            >Manage Address</a
+          >
+          <a
+            href="/users/viewAddress"
+            class="list-group-item list-group-item-action"
+            >View Address</a
+          >
+          <a
+            href="/users/change-password"
+            class="list-group-item list-group-item-action"
+            >change PassworD</a
+          >
+          <a href="/users/wallet" class="list-group-item list-group-item-action"
+            >wallet
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content for My Orders or Manage Address -->
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-success text-white">My Address</div>
+        <div class="card-body">
+          <form action="/users/addAddress" method="post" class="p-4">
+            <h5 class="section-title position-relative text-uppercase mb-3">
+              <span class="pr-3">New Address</span>
+            </h5>
+
+            <div class="mb-5 text-light" id="shipping-address">
+              <div class="tr p-30">
+                <div class="row">
+                  <div id="hidden-division">
+                    <div class="row">
+                      <div class="col-md-5 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="firstname"
+                          placeholder="First Name"
+                          required
+                        />
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="lastname"
+                          placeholder="Last Name"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-11 form-group">
+                      <input
+                        class="form-control mb-3"
+                        name="mobileN"
+                        type="text"
+                        placeholder="Mobile Number"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-11 form-group">
+                      <input
+                        class="form-control mb-3"
+                        type="text"
+                        name="address"
+                        placeholder="Address"
+                        required
+                      />
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="country"
+                          placeholder="Country"
+                          required
+                        />
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="city"
+                          placeholder="City"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="text"
+                          name="state"
+                          placeholder="State"
+                          required
+                        />
+                      </div>
+                      <div class="col-md-5 form-group">
+                        <input
+                          class="form-control mb-3"
+                          type="num"
+                          name="zipcode"
+                          placeholder="Post code"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <hr />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-primary mt-3">
+              Save Address
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

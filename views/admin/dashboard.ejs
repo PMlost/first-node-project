@@ -1,0 +1,199 @@
+<div>
+  <!-- Add a dropdown for the user to select the chart type -->
+  <select id="chartType" onchange="updateChart()">
+    <option value="monthly">Monthly Sales</option>
+    <option value="yearly">Yearly Sales</option>
+  </select>
+
+  <div
+    style="
+      background-color: lightblue;
+      width: 200px;
+      padding: 10px;
+      margin: 10px;
+    "
+  >
+    <i class="fas fa-shopping-cart"></i> Total Sales:<%= totalSales %>
+  </div>
+  <div
+    style="
+      background-color: lightgreen;
+      width: 200px;
+      padding: 10px;
+      margin: 10px;
+    "
+  >
+    <i class="fas fa-dollar-sign"></i> Total Revenue:<%= totalRevenue %>
+  </div>
+
+  <canvas id="salesChart"></canvas>
+  <!-- <canvas id="monthlySalesChart"></canvas>
+  <canvas id="yearlySalesChart"></canvas> -->
+  Top Sellingg product
+  <canvas id="topProductsChart"></canvas>
+  Top Category
+  <canvas id="topCategoriesChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  let salesChart;
+
+  function updateChart() {
+    const chartType = document.getElementById("chartType").value;
+
+    let endpoint, title;
+    if (chartType === "monthly") {
+      endpoint = "/admin/monthlySales";
+      title = "Monthly Sales";
+    } else if (chartType === "yearly") {
+      endpoint = "/admin/yearlySales";
+      title = "Yearly Sales";
+    }
+
+    // Send a request to the server to fetch the data for the selected chart type
+    axios.post(endpoint).then((response) => {
+      // console.log(response.data);
+      let labels = response.data.months || response.data.years;
+
+      console.log(labels);
+
+      if (chartType === "monthly") {
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        labels = labels.map((monthNumber) => monthNames[monthNumber]);
+        // console.log(labels);
+      }
+      // Update the chart with the new data
+      if (salesChart) {
+        salesChart.destroy(); // Destroy the old chart
+      }
+      salesChart = new Chart(
+        document.getElementById("salesChart").getContext("2d"),
+        {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: title,
+                data: response.data.sales,
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        }
+      );
+    });
+  }
+
+  // Update the chart when the page loads
+  updateChart();
+</script>
+
+<script>
+  // Create a new chart for the top products
+  const topProductsCtx = document
+    .getElementById("topProductsChart")
+    .getContext("2d");
+  let topProductsChart;
+
+  function updateTopProductsChart() {
+    // Send a request to the server to fetch the data for the top products
+    axios.post("/admin/topProducts").then((response) => {
+      // Update the chart with the new data
+      if (topProductsChart) {
+        topProductsChart.destroy(); // Destroy the old chart
+      }
+      topProductsChart = new Chart(topProductsCtx, {
+        type: "bar",
+        data: {
+          labels: response.data.productNames,
+          datasets: [
+            {
+              label: "Sales",
+              data: response.data.quantities,
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    });
+  }
+
+  // Update the top products chart when the page loads
+  updateTopProductsChart();
+</script>
+<script>
+  const topCategories = document
+    .getElementById("topCategoriesChart")
+    .getContext("2d");
+  let topCategoriesChart;
+
+  function updateTopCategoriesChart() {
+    axios.post("/admin/topCategory").then((response) => {
+      console.log(response.data.categoryNames);
+
+      if (topCategoriesChart) {
+        topCategoriesChart.destroy();
+      }
+      topCategoriesChart = new Chart(topCategories, {
+        type: "bar",
+        data: {
+          labels: response.data.categoryNames,
+          datasets: [
+            {
+              label: "Sales",
+              data: response.data.quantities,
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    });
+  }
+
+  updateTopCategoriesChart();
+</script>

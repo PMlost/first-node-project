@@ -1,0 +1,99 @@
+<div class="container">
+  <h1 class="text-center mb-4">Add Coupon</h1>
+
+  <!-- <div id="error-message" class="alert alert-danger" style="display: none">
+   
+  </div> -->
+
+  <h4 class="text-center text-primary my-1"><%=message%></h4>
+  <form action="/admin/add-coupon" method="POST" id="coupon-form">
+    <div class="mb-3">
+      <label for="couponName" class="form-label">Coupon Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="couponName"
+        name="couponName"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="discount" class="form-label">Discount (%)</label>
+      <input
+        type="number"
+        class="form-control"
+        id="discount"
+        name="discount"
+        min="1"
+        max="100"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="maxValue" class="form-label">Max Value</label>
+      <input
+        type="number"
+        class="form-control"
+        id="maxValue"
+        name="maxValue"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="minValue" class="form-label">Min Value</label>
+      <input
+        type="number"
+        class="form-control"
+        id="minValue"
+        name="minValue"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="expiryDate" class="form-label">Expiry Date</label>
+      <input
+        type="date"
+        class="form-control"
+        id="expiryDate"
+        name="expiryDate"
+        required
+      />
+    </div>
+    <button cl type="submit" class="btn btn-primary form-btn">Save</button>
+    <a href="/admin/view-coupon" class="btn btn-info ms-2">Back</a>
+  </form>
+</div>
+
+<script>
+  const couponNameInput = document.getElementById("couponName");
+  document.addEventListener("click", (e) => {
+    if (e.target.matches(".form-btn")) {
+      const cleanedValue = couponNameInput.value.trim().replace(/\s+/g, "");
+      const requiredValue = cleanedValue.substring(0, 8);
+
+      couponNameInput.value = requiredValue;
+    }
+  });
+
+  //message
+  // document
+  //   .getElementById("coupon-form")
+  //   .addEventListener("submit", function (e) {
+  //     e.preventDefault();
+
+  //     axios
+  //       .post("/admin/add-coupon", new FormData(this))
+  //       .then(function (response) {
+  //         // If the coupon was added successfully, redirect to the view coupon page
+  //         window.location.href = "/admin/view-coupon";
+  //       })
+  //       .catch(function (error) {
+  //         // If there was an error, display the error message in the 'error-message' div
+  //         if (error.response) {
+  //           document.getElementById("error-message").textContent =
+  //             error.response.data.message;
+  //           document.getElementById("error-message").style.display = "block";
+  //         }
+  //       });
+  //   });
+</script>

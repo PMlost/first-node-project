@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <div class="row g-0">
+    <% if (locals.errorMessage) { %>
+    <div class="alert alert-danger error-message" role="alert">
+      <%= errorMessage %>
+    </div>
+    <% } %>
+    <div class="col-md-6 d-none d-md-block">
+      <img
+        src="/images/Side-Image.png"
+        alt="Image"
+        class="img-fluid side-image"
+      />
+    </div>
+    <div class="col-md-6">
+      <div class="container py-3">
+        <h2 class="text-center mb-3">Sign Up</h2>
+
+        <form
+          class="needs-validation"
+          action="/users/signup"
+          method="post"
+          onsubmit="return validate()"
+        >
+          <div class="mb-2">
+            <label for="name" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Enter name"
+              required
+            />
+            <div class="invalid-feedback">Please provide a valid name.</div>
+          </div>
+          <div class="mb-2">
+            <label for="email" class="form-label">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="Enter email"
+              name="email"
+              required
+            />
+          </div>
+          <div class="mb-2">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Enter password"
+              required
+            />
+          </div>
+          <div class="mb-2">
+            <label for="password" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirm-password"
+              name="confirmpassword"
+              placeholder="Confirm password"
+              required
+            />
+          </div>
+          <div class="mb-2">
+            <label for="number" class="form-label">Mobile Number</label>
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">+91</span>
+              <input
+                type="text"
+                class="form-control"
+                id="number"
+                name="mobile"
+                placeholder="Enter mobile number"
+                required
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-danger">Sign Up</button>
+          <a href="#" class="d-block mt-2 text-muted">Forgot password?</a>
+        </form>
+        <p class="text-center mt-2">
+          Already have an account? <a href="/users/login">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

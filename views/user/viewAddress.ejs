@@ -1,0 +1,117 @@
+<!-- viewAddress.ejs -->
+
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar with My Orders and Manage Address -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="list-group">
+          <a
+            href="/users/profile"
+            class="list-group-item list-group-item-action card-header bg-success text-white"
+            >My Profile</a
+          >
+          <a
+            <a
+            href="/users/order-details"
+            class="list-group-item list-group-item-action"
+            >My Orders</a
+          >
+          <a
+            href="/users/manageAddress"
+            class="list-group-item list-group-item-action"
+            >Manage Address</a
+          >
+          <a
+            href="/users/viewAddress"
+            class="list-group-item list-group-item-action"
+            >View Address</a
+          >
+          <a
+            href="/users/change-password"
+            class="list-group-item list-group-item-action"
+            >change PassworD</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content for My Orders or Manage Address -->
+    <div class="col-md-8">
+      <% if (locals.addressDetails && locals.addressDetails.length > 0) { %>
+      <!-- Iterate through addresses -->
+      <% addressDetails.forEach((addressDetail) => { %>
+      <div class="card">
+        <div class="card-header bg-success text-white">My Addresses</div>
+
+        <div class="card-body">
+          <!-- Display address details -->
+          <div class="mb-5" id="shipping-address">
+            <div class="tr p-30">
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">First Name:</div>
+                <div class="col-md-9"><%= addressDetail.firstname %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">lastname:</div>
+                <div class="col-md-9"><%= addressDetail.lastname %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">Address:</div>
+                <div class="col-md-9"><%= addressDetail.address %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">Country:</div>
+                <div class="col-md-9"><%= addressDetail.country %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">City:</div>
+                <div class="col-md-9"><%= addressDetail.city %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">State:</div>
+                <div class="col-md-9"><%= addressDetail.state %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">Zip Code:</div>
+                <div class="col-md-9"><%= addressDetail.zipcode %></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 font-weight-bold">Mobile Number:</div>
+                <div class="col-md-9"><%= addressDetail.mobileN %></div>
+              </div>
+
+              <!-- Edit and Delete Buttons -->
+              <div class="row mt-3">
+                <div class="col-md-6 text-end">
+                  <a
+                    href="/users/editAddress/?id=<%=addressDetail._id%>"
+                    class="btn btn-success"
+                    >Edit</a
+                  >
+                </div>
+                <div class="col-md-6 text-start">
+                  <a
+                    href="/users/deleteAddress?id=<%=addressDetail._id%>"
+                    class="btn btn-danger"
+                    >Delete</a
+                  >
+                </div>
+              </div>
+            </div>
+            <a
+              href="/users/selectedAddress?addressId=<%= addressDetail._id %>"
+              class="btn btn-success"
+              >Select Address</a
+            >
+          </div>
+        </div>
+        <br />
+        <% }); %> <% } else { %>
+
+        <p>No addresses found.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<!-- Category Section -->
+<section id="category">
+  <h2 class="section-title">Category Details</h2>
+
+  <!-- Add Category Button -->
+  <div class="text-end mb-3">
+    <a href="/admin/add-category" class="btn btn-warning">Add Category</a>
+  </div>
+
+  <!-- Category Table -->
+  <div class="table-responsive mt-3">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Category Name</th>
+
+          <th scope="col">Offer</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Replace this block with your server-side logic to fetch categories -->
+        <% if (locals.categoryDetails) { %> <%
+        categoryDetails.forEach((categoryDetail, index) => { %>
+        <tr>
+          <th scope="row"><%= index + 1 %></th>
+          <td><%= categoryDetail.name %></td>
+
+          <td><%= categoryDetail.offer ? "YES" : "NO" %></td>
+          <td>
+            <% if (categoryDetail.isAvailable) { %>
+            <a
+              class="btn btn-danger btn-md"
+              href="/admin/unlist-category?id=<%= categoryDetail._id %>"
+            >
+              unList
+            </a>
+            <% } else { %>
+
+            <a
+              class="btn btn-success btn-md"
+              href="/admin/unlist-category?id=<%= categoryDetail._id %>"
+            >
+              List
+            </a>
+
+            <% } %>
+            <a
+              href="/admin/edit-category?id=<%= categoryDetail._id %>"
+              class="btn btn-md btn-primary"
+              >Edit</a
+            >
+          </td>
+        </tr>
+        <% }) %> <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>

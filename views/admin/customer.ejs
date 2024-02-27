@@ -1,0 +1,46 @@
+<!-- Customer Section -->
+<section id="customer">
+  <h2 class="section-title">Customer Details</h2>
+  <div class="table-responsive mt-3">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <% if(locals.allCustomers){%>
+          <!-- // -->
+          <% allCustomers.forEach((customer, index) => {%>
+          <th scope="row"><%= index + 1 %></th>
+          <td><%= customer.name %></td>
+          <td><%= customer.email %></td>
+          <td><%= customer.mobile %></td>
+          <td>
+            <% if(customer.isBlocked == 0){%>
+            <a href="/admin/customer/<%= customer._id %>"
+              ><button class="btn btn-danger">
+                <i class="fas fa-ban"></i> Block
+              </button></a
+            >
+
+            <% }else{%>
+            <a href="/admin/customer/<%= customer._id %>"
+              ><button class="btn btn-success">
+                <i class="fas fa-ban"></i> Unblock
+              </button></a
+            >
+
+            <%}%>
+          </td>
+        </tr>
+        <% }); %> <% }%>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,61 @@
+<div class="container">
+  <h2 class="mt-4 mb-4">Add Category</h2>
+
+  <!-- Display categoryMessage with appropriate styling -->
+  <h4 class="text-center text-primary my-1 err-message">
+    <%=locals.categoryMessage%>
+  </h4>
+
+  <!-- Add Category Form -->
+  <form
+    class="form-category"
+    action="/admin/add-category"
+    method="POST"
+    onsubmit="return validateForm()"
+  >
+    <div class="mb-3">
+      <label for="categoryName" class="form-label">Category Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="categoryName"
+        name="categoryName"
+        required
+        pattern="^[A-Za-z]+$"
+      />
+    </div>
+
+    <!-- offer  -->
+    <div class="mb-3">
+      <label for="offer" class="form-label">Product Offer</label>
+      <select class="form-control" id="offer" name="offer">
+        <option selected disabled>Select Offer</option>
+        <% if(locals.offerArray) {%> <%offerArray.forEach((offer)=>{%>
+        <option value="<%= offer._id %>"><%= offer.name %></option>
+        <% }) %> <% } else{ %>
+        <h1>No Offers to add</h1>
+        <% } %>
+      </select>
+    </div>
+
+    <!-- Style the buttons consistently -->
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+      <button type="submit" class="btn btn-primary me-md-2 form-btn">
+        Add Category
+      </button>
+      <a href="/admin/category" class="btn btn-secondary">Back</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  const categoryNameInput = document.getElementById("categoryName");
+  document.addEventListener("click", (e) => {
+    if (e.target.matches(".form-btn")) {
+      const cleanedValue = categoryNameInput.value.trim().replace(/\s+/g, "");
+      const requiredValue = cleanedValue.substring(0, 15);
+
+      categoryNameInput.value = requiredValue;
+    }
+  });
+</script>

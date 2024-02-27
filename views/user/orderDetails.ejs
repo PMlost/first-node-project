@@ -1,0 +1,103 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar with My Orders and Manage Address -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="list-group">
+          <a
+            href="/users/profile"
+            class="list-group-item list-group-item-action card-header bg-success text-white"
+            >My Profile</a
+          >
+          <a
+            <a
+            href="/users/order-details"
+            class="list-group-item list-group-item-action"
+            >My Orders</a
+          >
+          <a
+            href="/users/manageAddress"
+            class="list-group-item list-group-item-action"
+            >Manage Address</a
+          >
+          <a
+            href="/users/viewAddress"
+            class="list-group-item list-group-item-action"
+            >View Address</a
+          >
+          <a
+            href="/users/change-password"
+            class="list-group-item list-group-item-action"
+            >change PassworD</a
+          >
+          <a href="/users/wallet" class="list-group-item list-group-item-action"
+            >wallet
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Main Content -->
+    <div class="col-md-8">
+      <div style="color: #333; padding: 20px">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10 offset-md-1">
+              <% orderData.forEach((order) => { %>
+
+              <!-- // -->
+
+              <div class="card mb-4" style="border-radius: 15px">
+                <div class="card-header bg-dark text-light">Order Details</div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    >
+                    <h5>Order ID: <%= order._id %></h5>
+                    <p>Date Purchased: <%= order.createdAt.toDateString() %></p>
+                    <p>Payment: <%= order.payment.method %></p>
+                    <p>Amount: <%= order.payment.amount %></p>
+                    <p>Status: <%= order.status %></p>
+                    <!-- multiple product-->
+                    <% if (order.products.item.length === 1) { %>
+                    <p>Product: <%= order.products.item[0].productId.name %></p>
+                    <% } else if (order.products.item.length > 1) { %>
+                    <p>
+                      Products: <%= order.products.item[0].productId.name %>,
+                      <a
+                        class="text-decoration-none"
+                        href="/users/fullOrderDetails?id=<%= order._id %>"
+                      >
+                        <small class="h6 text-info"> more..</small>
+                      </a>
+                    </p>
+                    <% } %>
+                  </div>
+
+                  <% if (order.status === "Pending") { %>
+                  <button class="btn btn-warning" type="button">
+                    <a
+                      class="text-light text-decoration-none"
+                      href="/users/continue-payment?id=<%= order._id %>"
+                    >
+                      <small class="text-uppercase">Continue Payment</small>
+                    </a>
+                  </button>
+                  <% } else { %>
+                  <button class="btn btn-primary" type="button">
+                    <a
+                      class="text-light text-decoration-none"
+                      href="/users/fullOrderDetails?id=<%= order._id %>"
+                    >
+                      <small class="text-uppercase">View Order Details</small>
+                    </a>
+                  </button>
+                  <% } %>
+                </div>
+              </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

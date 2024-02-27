@@ -1,0 +1,193 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Add Product</h2>
+
+      <% if (locals.message) { %>
+      <div class="alert alert-danger" role="alert"><%= message %></div>
+      <% } %>
+
+      <form
+        action="/admin/add-product"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <!-- name input -->
+        <div class="mb-3">
+          <label for="name" class="form-label">name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            required
+          />
+        </div>
+
+        <!-- Category Input -->
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select class="form-control" id="category" name="category" required>
+            <option selected disabled>Select Category</option>
+
+            <% if(locals.categoryArray) {%>
+            <%categoryArray.filter(category=>category.isAvailable).forEach((category)=>{%>
+
+            <option value="<%= category.name %>"><%= category.name %></option>
+            <% }) %> <% } else{ %>
+            <h1>No Categories to add</h1>
+            <% } %>
+          </select>
+        </div>
+
+        <!-- offer  -->
+        <div class="mb-3">
+          <label for="offer" class="form-label">Product Offer</label>
+          <select class="form-control" id="offer" name="offer">
+            <option selected disabled>Select Offer</option>
+            <% if(locals.offerArray) {%> <%offerArray.forEach((offer)=>{%>
+            <option value="<%= offer._id %>"><%= offer.name %></option>
+            <% }) %> <% } else{ %>
+            <h1>No Offers to add</h1>
+            <% } %>
+          </select>
+        </div>
+
+        <!-- Price Input -->
+        <div class="mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            name="price"
+            required
+          />
+        </div>
+
+        <!-- Stock Input -->
+        <div class="mb-3">
+          <label for="stock" class="form-label">Stock</label>
+          <input
+            type="number"
+            class="form-control"
+            id="stock"
+            name="stock"
+            required
+          />
+        </div>
+
+        <!-- Description Input -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+
+          <input
+            id="description"
+            name="description"
+            placeholder="Enter Description"
+            class="form-control input-md highlight"
+            required=""
+            type="text"
+            required
+          />
+        </div>
+        <!-- rating -->
+
+        <!-- <label
+          style="color: white"
+          class="col-md-4 control-label"
+          for="product_name"
+          >Rating</label
+        >
+        <br />
+        <input
+          id="product_name"
+          name="pRating"
+          placeholder="Market Rating"
+          class="form-control input-md highlight"
+          required=""
+          type="text"
+        /> -->
+        <!-- Display uploaded images -->
+        <!-- Display uploaded images -->
+        <!-- Display uploaded images -->
+
+        <!-- Image Input -->
+        <div class="mb-3">
+          <label for="image" class="form-label">Image</label>
+          <input
+            type="file"
+            class="form-control"
+            id="image"
+            name="image"
+            multiple
+            required
+          />
+        </div>
+
+        <!-- Display uploaded images -->
+        <div id="image-container"></div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="/admin/view-product" class="btn btn-primary"> back </a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("image").addEventListener("change", function (event) {
+    // Clear the previous images
+    const imageContainer = document.getElementById("image-container");
+    imageContainer.innerHTML = "";
+
+    Array.from(event.target.files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        // Create a new img element for each image
+        const img = document.createElement("img");
+        img.style.width = "50px";
+        img.style.height = "50px";
+        img.src = e.target.result;
+        imageContainer.appendChild(img);
+        // // Create a new close button for each image
+        // const closeButton = document.createElement("button");
+        // closeButton.type = "button";
+        // closeButton.className = "close btn-close";
+        // closeButton.innerHTML = "×";
+        // closeButton.style.position = "absolute";
+        // closeButton.style.top = "0";
+        // closeButton.style.right = "0";
+
+        // closeButton.addEventListener("click", function () {
+        //   this.parentNode.remove();
+        // });
+
+        // // Create a container for the img and close button
+        // const div = document.createElement("div");
+        // div.className = "mb-3 position-relative";
+        // div.style.display = "inline-block";
+        // div.appendChild(img);
+        // div.appendChild(closeButton);
+
+        // // Add the container to the image container
+        // imageContainer.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // // Create a new input element to replace the current one
+    // const newInput = document.createElement("input");
+    // newInput.type = "file";
+    // newInput.className = "form-control";
+    // newInput.id = "image";
+    // newInput.name = "image";
+    // newInput.multiple = true;
+
+    // // Replace the current input with the new one
+    // event.target.parentNode.replaceChild(newInput, event.target);
+  });
+</script>
+
+<!-- ,............ -->

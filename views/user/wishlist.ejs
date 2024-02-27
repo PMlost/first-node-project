@@ -1,0 +1,115 @@
+<div>
+  <div class="container mt-4">
+    <h2 class="text-primary mb-4">Wishlist</h2>
+
+    <% if (locals.wistlistArray && wistlistArray.length>0) {%>
+    <!-- // -->
+
+    <!-- // -->
+    <%for(let prodObj of wistlistArray){ %>
+
+    <div class="row border mb-4 p-3 align-items-center">
+      <div class="col-md-2">
+        <img
+          src="<%=prodObj.productId.imgSrc[0]  %>"
+          class="img-fluid"
+          alt=""
+          style="max-height: 100px"
+        />
+      </div>
+      <div class="col-md-2">
+        <h5><%=prodObj.productId.name %></h5>
+      </div>
+      <div class="col-md-2">
+        <p>Price: ₹ <%=prodObj.price %></p>
+      </div>
+      <div class="col-md-4 text-right">
+        <a
+          data-product-id="<%= (prodObj.productId._id) %>"
+          class="btn btn-success add-to-cart-btn"
+          >Add to Cart</a
+        >
+        <a
+          data-product-id="<%= (prodObj.productId._id)  %>"
+          class="btn btn-danger remove-from-wishlist-btn"
+          >Remove</a
+        >
+      </div>
+    </div>
+
+    <%} %> <%} else{%>
+    <h5>No wishlist products!</h5>
+    <%} %>
+  </div>
+</div>
+
+<!-- //toastr -->
+<script
+  defer
+  src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+></script>
+<!-- //script of adding cart quantity -->
+<script defer>
+  document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const productId = this.dataset.productId;
+
+      if (productId) {
+        axios
+          .post("/users/addToCart", { productId })
+          .then((response) => {
+            if (response.data.success) {
+              const totalQuantity = response.data.totalQuantity;
+              document.querySelector(".cart-total-count").textContent =
+                totalQuantity;
+              toastr.success("Product added to cart successfully!", "Success");
+
+              removeFromWishlist(productId);
+            } else {
+              toastr.error(response.data.message, "User not signed in");
+            }
+          })
+          .catch((error) => {
+            toastr.error("Error adding product to cart.", "Error");
+            console.error("Error adding to cart:", error);
+          });
+      }
+    });
+  });
+
+  //remove btn functionality
+  document.querySelectorAll(".remove-from-wishlist-btn").forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const productId = this.dataset.productId;
+      const confirmation = confirm("do you want to delete this iteM?");
+
+      if (confirmation) {
+        if (productId) {
+          removeFromWishlist(productId);
+        }
+      }
+    });
+  });
+  //remove function for  both add to cart and remove btton
+  function removeFromWishlist(productId) {
+    axios
+      .post("/users/remove-from-wishlist", { productId })
+      .then((response) => {
+        if (response.data.success) {
+          const itemRow = document
+            .querySelector(`[data-product-id="${productId}"]`)
+            .closest(".row");
+          itemRow.parentNode.removeChild(itemRow);
+          window.location.href = "/users/wishlist";
+        }
+      })
+      .catch((error) => {
+        toastr.error("Error removing product from wishlist.", "Error");
+        console.error("Error removing from wishlist:", error);
+      });
+  }
+</script>

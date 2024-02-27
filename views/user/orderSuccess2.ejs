@@ -1,0 +1,212 @@
+<div class="container-fluid">
+  <div class="container">
+    <!-- Title -->
+    <div class="d-flex justify-content-between align-items-center py-3">
+      <h2 style="color: black" class="h5 mx-5 mb-0">
+        <a href="#" class="text-muted"></a> Order #<%= orderDetails._id %>
+      </h2>
+    </div>
+
+    <!-- Main content -->
+    <div class="row mx-4">
+      <div class="col-lg-11">
+        <!-- Details -->
+        <div
+          style="background-color: #f8f9fa; border-radius: 30px; color: black"
+          class="card mb-4"
+        >
+          <div class="card-body">
+            <div class="mb-3 d-flex justify-content-between">
+              <div>
+                <span class="me-3"
+                  ><%= orderDetails.createdAt.toDateString() %></span
+                >
+                <span
+                  style="background-color: #007bff"
+                  class="badge rounded-pill"
+                  ><%= orderDetails.status %></span
+                >
+              </div>
+              <div class="d-flex">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-link p-0 text-muted"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                  >
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><i class="bi bi-pencil"></i> Edit</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><i class="bi bi-printer"></i> Print</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <table style="color: black" class="table table-borderless">
+              <tbody>
+                <% for(let key of orderDetails.products.item) { %>
+                <tr>
+                  <td>
+                    <div class="d-flex mb-2">
+                      <div class="flex-shrink-0">
+                        <img
+                          src=""
+                          alt=""
+                          width="70"
+                          class="img-fluid rounded"
+                        />
+                      </div>
+                      <div class="flex-lg-grow-1 ms-3">
+                        <h5 class="mb-0 text-uppercase">
+                          <%= key.productId.name %>
+                        </h5>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Quantity: <%= key.quantity %></td>
+                  <td class="text-end">Amount: <%= key.price %></td>
+                </tr>
+                <% } %>
+              </tbody>
+              <tfoot>
+                <tr class="fw-bold">
+                  <td></td>
+                  <td></td>
+                  <td class="text-end h4">
+                    <span class="h6">TOTAL : </span>
+                    <%= orderDetails.payment.amount %>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <!-- Payment -->
+        <div
+          style="background-color: #f8f9fa; border-radius: 30px; color: black"
+          class="card mb-4"
+        >
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <h3 class="h4 mb-4">Payment Method</h3>
+                <p>
+                  <%= orderDetails.payment.method %> <br />
+                  Total: <%= orderDetails.payment.amount %>
+                </p>
+                <% if(orderDetails.paymentDetails) { %>
+                <h3 class="h4 mb-4">Payment Details</h3>
+                <p>
+                  Receipt no: <%= orderDetails.paymentDetails.reciept %><br />
+                  Status: <%= orderDetails.status %>
+                </p>
+                <% } %>
+              </div>
+              <div class="col-lg-6">
+                <h3 class="h4">Billing address</h3>
+                <address>
+                  <strong
+                    ><%= orderDetails.address.firstname %> <%=
+                    orderDetails.address.lastname %></strong
+                  ><br />
+                  <%= orderDetails.address.address %><br />
+                  Pin: <%= orderDetails.address.zipcode %> <br />
+                  Phone: <%= orderDetails.address.mobileN %>
+                </address>
+                <div>
+                  <% if(orderDetails.status == "Delivered") { %> <% const
+                  currentDate = new Date(); const cutoffDate = new Date();
+                  cutoffDate.setDate(currentDate.getDate() - 14); const
+                  createdAtDate = new Date(orderDetails.createdAt); if
+                  (createdAtDate <= cutoffDate) { %>
+                  <button
+                    style="display: block"
+                    type="button"
+                    class="btn btn-danger"
+                    disabled
+                  >
+                    Return Item
+                  </button>
+                  <% } else { %>
+                  <a
+                    style="display: block"
+                    href="/returnOrder?id=<%= orderDetails._id %>"
+                    class="btn btn-danger"
+                    >Return Item</a
+                  >
+                  <% } %> <% } else if(orderDetails.status == "cancelled") { %>
+                  <h5 class="text-uppercase text-danger">Order Cancelled</h5>
+                  <% } else if(orderDetails.status == "returned") { %>
+                  <h6>Returned</h6>
+                  <% } else if(orderDetails.status == "return success") { %>
+                  <h6>Returned Successfully</h6>
+                  <% } else { %>
+                  <a
+                    href="/cancelorder?id=<%= orderDetails._id %>"
+                    class="btn btn-danger text-uppercase"
+                    ><small>Cancel Order</small></a
+                  >
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <!-- Customer Notes -->
+        <div
+          style="background-color: #f8f9fa; border-radius: 30px; color: black"
+          class="card mb-4"
+        >
+          <div class="card-body">
+            <h3 style="margin-bottom: 20px" class="h5">
+              Thanks for your Order,
+            </h3>
+            <p>
+              We are grateful for your business and appreciate your trust in us.
+              Our team is dedicated to ensuring that you receive the best
+              possible service and product quality. Should you have any
+              questions or concerns, please do not hesitate to reach out to us.
+            </p>
+          </div>
+        </div>
+        <div
+          style="background-color: #f8f9fa; border-radius: 30px; color: black"
+          class="card mb-4"
+        >
+          <!-- Shipping information -->
+          <div class="card-body">
+            <h3 class="h5">Shipping Information</h3>
+            <strong>BLUEDART</strong>
+            <span
+              ><a href="#" class="text-decoration-underline" target="_blank"
+                >XXXXXXX67890</a
+              ><i class="bi bi-box-arrow-up-right"></i
+            ></span>
+            <hr />
+            <h3 class="h6">Address</h3>
+            <address>
+              <strong
+                ><%= orderDetails.address.firstname %> <%=
+                orderDetails.address.lastname %></strong
+              ><br />
+              <%= orderDetails.address.address %><br />
+              Pin: <%= orderDetails.address.zipcode %> <br />
+              Phone: <%= orderDetails.address.mobilN %>
+            </address>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

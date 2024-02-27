@@ -1,0 +1,49 @@
+<div class="container">
+  <h1 class="text-center mb-4">View Offers</h1>
+  <div class="mb-3">
+    <a href="/admin/add-offer" class="btn btn-info">Add Offer</a>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">SL NO</th>
+        <th scope="col">Offer Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Discount</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% offers.forEach((offer, index) => { %>
+      <tr>
+        <th scope="row"><%= index + 1 %></th>
+        <td><%= offer.name %></td>
+        <td><%= offer.type %></td>
+        <td><%= offer.discountPercentage %>%</td>
+        <td><%= offer.startDate.toDateString() %></td>
+        <td><%= offer.endDate.toDateString() %></td>
+        <td>
+          <button
+            class="btn btn-danger btn-delete"
+            onclick="confirmDelete(`<%= offer._id %>`)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function confirmDelete(offerId) {
+    if (confirm("Are you sure to delete?")) {
+      window.location.href = `/admin/delete-offer?id=${offerId}`;
+    } else {
+      return false;
+    }
+  }
+</script>

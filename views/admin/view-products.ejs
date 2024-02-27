@@ -1,0 +1,70 @@
+<section id="product">
+  <h2 class="section-title">Products</h2>
+
+  <div class="text-end mb-3">
+    <a href="/admin/add-product" class="btn btn-success">Add Product</a>
+  </div>
+
+  <!-- Product Table -->
+  <div class="table-responsive mt-3">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">SL NO</th>
+          <th scope="col">NAME</th>
+          <th scope="col">STOCK</th>
+          <th scope="col">CATEGORY</th>
+          <th scope="col">PRICE</th>
+          <!-- <th scope="col">RATING</th> -->
+          <th scope="col">IMAGE</th>
+          <th scope="col">ACTION</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Replace this block with your server-side logic to fetch products -->
+        <% if (locals.products) { %>
+        <!-- / -->
+        <% products.forEach((product, index) => {%> <% if(!product.isDeleted){%>
+        <tr>
+          <th scope="row"><%= index + 1 %></th>
+          <td><%= product.name %></td>
+          <td><%= product.stock %></td>
+          <td><%= product.category %></td>
+          <td><%= product.price %></td>
+
+          <td>
+            <% product.imgSrc.forEach((imgUrl) => { %>
+
+            <img style="width: 50px; height: 50px" src="<%= imgUrl %>" alt="" />
+            <% }); %>
+          </td>
+
+          <td>
+            <a
+              href="/admin/edit-product/<%= product._id %>"
+              class="btn btn-primary btn-sm"
+              >Edit</a
+            >
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="confirmDelete('<%= product._id %>')"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        <% }%> <% }); %> <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  function confirmDelete(productId) {
+    if (confirm("Are you sure to delete?")) {
+      window.location.href = `/admin/delete-product/${productId}`;
+    } else {
+      return false;
+    }
+  }
+</script>

@@ -1,0 +1,67 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0">OTP Verification</h5>
+        </div>
+        <div class="card-body">
+          <% if (locals.errorMessage) { %>
+          <p style="color: red"><%= errorMessage %></p>
+          <% } %>
+          <form action="/users/verify-otp" method="post">
+            <div class="mb-3">
+              <label for="otp" class="form-label">Enter OTP</label>
+              <input
+                type="text"
+                class="form-control"
+                id="otp"
+                name="otp"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-info">Verify OTP</button>
+            </div>
+            <div id="resendOtp" class="mb-3 resendOtp" style="display: none">
+              <button type="button" class="btn btn-info">Resend OTP</button>
+            </div>
+          </form>
+          <div id="timer" class="mb-3 timer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let timeLeft = 60;
+  let timerId = setInterval(countdown, 1000);
+
+  function countdown() {
+    if (timeLeft == 0) {
+      clearTimeout(timerId);
+      document.getElementById("resendOtp").style.display = "block";
+    } else {
+      document.getElementById("timer").innerHTML =
+        timeLeft + " seconds remaining";
+      timeLeft--;
+    }
+  }
+
+  document.getElementById("resendOtp").addEventListener("click", function () {
+    axios
+      .post("/users/resend-otp")
+      .then(function (response) {
+        console.log(response);
+        alert("OTP resent successfully");
+        // Reset the timer
+        timeLeft = 60;
+        timerId = setInterval(countdown, 1000);
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("Failed to resend OTP");
+      });
+  });
+</script>
