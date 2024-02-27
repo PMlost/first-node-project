@@ -50,4 +50,6 @@ app.use("/users", userRouter);
 const adminRouter = require("./routes/admin");
 app.use("/admin", adminRouter);
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.log("server running succesfully on port 3000");
+});
