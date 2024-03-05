@@ -1,7 +1,6 @@
 const User = require("../models/userModel");
 const Product = require("../models/adminProductModel");
 
-//loadingCart
 const cart = async (req, res) => {
   try {
     const userSession = req.session.user;
@@ -19,8 +18,6 @@ const cart = async (req, res) => {
       ],
     });
 
-    // console.log(userCompleteData.cart.item);
-
     if (!userCompleteData) {
       console.log("User not found");
       return next();
@@ -34,7 +31,6 @@ const cart = async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    // Handle other errors
     return next(error);
   }
 };
@@ -44,7 +40,6 @@ const addToCart = async (req, res) => {
     const userId = req.session.user.id;
     const productId = req.body.productId;
 
-    //findind user based on the id
     const user = await User.findById(userId);
 
     const product = await Product.findById(productId)
@@ -58,7 +53,6 @@ const addToCart = async (req, res) => {
       console.log("not found");
     }
 
-    //product obj inside array
     const isExistingItem = user.cart.item.find((prodObj) =>
       prodObj.productId.equals(product._id)
     );
@@ -93,7 +87,7 @@ const addToCart = async (req, res) => {
       });
     }
     user.cart.totalPrice = user.cart.totalPrice + price;
-    // console.log(user.cart);
+
     await user.save();
 
     req.session.userCartItems = user.cart.item;
@@ -160,8 +154,6 @@ const updateCart = async (req, res) => {
       user.cart.totalPrice -= price;
     }
 
-    // console.log(user.cart);
-
     const grandTotal = user.cart.totalPrice;
 
     await user.save();
@@ -198,7 +190,7 @@ const deleteCart = async (req, res) => {
     const productObjIndex = user.cart.item.findIndex((prodObj) => {
       return prodObj.productId.equals(productId);
     });
-    // ..................
+
     if (productObjIndex !== -1) {
       const removedProduct = user.cart.item.splice(productObjIndex, 1)[0];
 

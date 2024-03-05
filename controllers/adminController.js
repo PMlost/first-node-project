@@ -67,7 +67,6 @@ const loadCustomer = async (req, res) => {
   }
 };
 
-//block-customer
 const blockCustomer = async (req, res) => {
   const userId = req.params.id;
 
@@ -91,7 +90,6 @@ const blockCustomer = async (req, res) => {
   }
 };
 
-//category
 const categorySection = async (req, res, next) => {
   try {
     const categoryDetails = await categoryModel.find();
@@ -191,7 +189,6 @@ const unlistCategory = async (req, res) => {
   } catch (error) {}
 };
 
-//logout admin
 const logoutAdmin = async (req, res) => {
   req.session.admin = null;
   res.redirect("/admin/login");

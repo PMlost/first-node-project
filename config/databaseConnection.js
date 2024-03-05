@@ -19,7 +19,6 @@ const connectDB = async function () {
 
 async function Database() {
   try {
-    // Connect to the database
     await connectDB();
   } catch (err) {
     console.error(err);
