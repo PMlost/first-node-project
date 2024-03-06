@@ -401,7 +401,6 @@ const updateProfile = async (req, res) => {
   }
 };
 
-//load address
 const manageAddress = async (req, res) => {
   const userSession = req.session.user;
   const userCartItems = req.session.userCartItems;
@@ -604,7 +603,6 @@ const placeOrder = async (req, res) => {
       res.render("user/orderFinish.ejs", { user: req.session.user });
     } else if (req.body.payment == "Online") {
       const { RPY_KEYID, RPY_KEYSECRET } = process.env;
-      //razorpay integration
 
       let instance = new RazorPay({
         key_id: RPY_KEYID,
@@ -857,7 +855,6 @@ const viewWallet = async (req, res, next) => {
       .findOne({ userId: userSession.id })
       .populate("userId");
 
-    console.log(walletData);
     let userName, walletAmount, transactions;
     if (walletData) {
       userName = walletData.userId.name;

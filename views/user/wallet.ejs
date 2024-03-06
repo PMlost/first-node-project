@@ -1,7 +1,6 @@
 <!-- Profile Page Content -->
 <div class="container mt-5">
   <div class="row">
-    <!-- Sidebar with My Orders and Manage Address -->
     <div class="col-md-4">
       <div class="card">
         <div class="list-group">
@@ -115,13 +114,12 @@
         .post("/users/verifyReferralCode", { referralCode: referralCode })
         .then(function (response) {
           console.log(response.data);
-          // handle success
+
           console.log(response);
           alert("Referral code applied successfully!");
           window.location.href = "/users/wallet";
         })
         .catch(function (error) {
-          // handle error
           console.log(error);
           alert("Failed to apply referral code");
         });

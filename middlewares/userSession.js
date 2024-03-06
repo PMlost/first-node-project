@@ -8,7 +8,6 @@ const isLogin = async (req, res, next) => {
 
       if (user) {
         req.session.userCartItems = user.cart.item;
-        // ........
       }
     } catch (error) {
       console.error(error.message);

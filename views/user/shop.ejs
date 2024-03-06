@@ -408,18 +408,16 @@
          </div>
 
        `;
-            // If it's the end of a row, close the row div and start a new one
+
             if ((index + 1) % 3 === 0) {
               productHTML += '</div><div class="row">';
             }
 
-            // Append the product HTML to the product container
             productContainer.innerHTML += productHTML;
           });
 
-          //generate pagination
           let paginationContainer = document.querySelector(".pagination");
-          paginationContainer.innerHTML = ""; // Clear existing pagination
+          paginationContainer.innerHTML = "";
 
           for (let i = 1; i <= response.data.totalPages; i++) {
             let isActive = page === i ? "active" : "";
@@ -431,9 +429,8 @@
             paginationContainer.innerHTML += pageItemHTML;
           }
         })
-        //end pagination
+
         .catch(function (error) {
-          // handle error
           console.log(error);
         });
     }

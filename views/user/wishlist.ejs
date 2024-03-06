@@ -2,11 +2,8 @@
   <div class="container mt-4">
     <h2 class="text-primary mb-4">Wishlist</h2>
 
-    <% if (locals.wistlistArray && wistlistArray.length>0) {%>
-    <!-- // -->
-
-    <!-- // -->
-    <%for(let prodObj of wistlistArray){ %>
+    <% if (locals.wistlistArray && wistlistArray.length>0) {%> <%for(let prodObj
+    of wistlistArray){ %>
 
     <div class="row border mb-4 p-3 align-items-center">
       <div class="col-md-2">
@@ -43,12 +40,11 @@
   </div>
 </div>
 
-<!-- //toastr -->
 <script
   defer
   src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
 ></script>
-<!-- //script of adding cart quantity -->
+
 <script defer>
   document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
     button.addEventListener("click", function (e) {
@@ -79,7 +75,6 @@
     });
   });
 
-  //remove btn functionality
   document.querySelectorAll(".remove-from-wishlist-btn").forEach((button) => {
     button.addEventListener("click", function (e) {
       e.preventDefault();
@@ -94,7 +89,7 @@
       }
     });
   });
-  //remove function for  both add to cart and remove btton
+
   function removeFromWishlist(productId) {
     axios
       .post("/users/remove-from-wishlist", { productId })
