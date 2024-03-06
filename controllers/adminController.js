@@ -91,7 +91,6 @@ const blockCustomer = async (req, res) => {
   }
 };
 
-//category
 const categorySection = async (req, res, next) => {
   try {
     const categoryDetails = await categoryModel.find();
