@@ -188,7 +188,9 @@
                   >
                     <span class="pr-3">Choose Address</span>
                   </h5>
-
+                  <button id="addAddressButton" class="btn btn-primary mt-3">
+                    Save New Address
+                  </button>
                   <div class="form-check text-black">
                     <input
                       class="form-check-input"
@@ -200,6 +202,7 @@
                     <label class="form-check-label" for="newAddressRadio">
                       Enter a new address
                     </label>
+                 
                   </div>
                 </div>
               </div>
@@ -554,13 +557,13 @@
           toastr.error(response.data.couponMessage);
         }
 
-        //
+    
       })
       .catch((error) => {
         console.log(error.message);
       });
   }
-  // delivery charge
+
   function calculateDeliveryCharge() {
 
   let totalPrice = parseFloat(document.getElementById("subTotal").value);
@@ -578,5 +581,52 @@
 
 
 calculateDeliveryCharge();
+
+
+
+// ... add new address/
+document.getElementById('addAddressButton').addEventListener('click', function(e) {
+  e.preventDefault();
+
+  var firstname = document.querySelector("input[name='firstname']").value;
+  var lastname = document.querySelector("input[name='lastname']").value;
+  var mobileN = document.querySelector("input[name='mno']").value;
+  var address = document.querySelector("input[name='address']").value;
+  var country = document.querySelector("input[name='country']").value;
+  var city = document.querySelector("input[name='city']").value;
+  var state = document.querySelector("input[name='state']").value;
+  var zipcode = document.querySelector("input[name='zip']").value;
+
+  axios.post('/users/addAddress', {
+    firstname: firstname,
+    lastname: lastname,
+    mobileN: mobileN,
+    address: address,
+    country: country,
+    city: city,
+    state: state,
+    zipcode: zipcode
+  })
+  .then(function (response) {
+
+    // console.log(response);
+
+    document.querySelector("input[name='firstname']").value = firstname;
+    document.querySelector("input[name='lastname']").value = lastname;
+    document.querySelector("input[name='mno']").value = mobileN;
+    document.querySelector("input[name='address']").value = address;
+    document.querySelector("input[name='country']").value = country;
+    document.querySelector("input[name='city']").value = city;
+    document.querySelector("input[name='state']").value = state;
+    document.querySelector("input[name='zip']").value = zipcode;
+
+    toastr.success('New address added successfully!');
+  })
+  .catch(function (error) {
+
+    console.error(error);
+    toastr.error('There was an error adding the new address.');
+  });
+});
 
 </script>
